@@ -1,0 +1,1 @@
+The Dog is supported by the Wind by gaining inspiration, spontaneity, and a refreshing sense of freedom, which helps balance their intense emotions and prevent emotional stagnation. In turn, the Wind finds in the Dog loyalty, depth of feeling, and a grounded sincerity that enriches its ever-changing, restless nature.

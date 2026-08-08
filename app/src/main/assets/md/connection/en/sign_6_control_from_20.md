@@ -1,0 +1,1 @@
+The Lord exercises control over the Skull by channeling his inner strength and emotional intelligence to guide and stabilize the Skull’s quiet, determined nature, transforming inner resilience into strategic influence. He subtly shapes situations through empathy and patience, ensuring the Skull’s calm persistence leads to long-term success without overt confrontation.

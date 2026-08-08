@@ -1,0 +1,1 @@
+The Snake supports the Reed by tempering its relentless drive with wisdom and intuition, helping it to recognize when to push forward and when to pause. In turn, the Reed inspires the Snake to channel its hidden energy into tangible growth, transforming visionary insights into lasting achievements.

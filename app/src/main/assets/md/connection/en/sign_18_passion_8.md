@@ -1,0 +1,1 @@
+Kremlin and Sunrise may clash due to Kremlin's rigid adherence to principles and directness, which can seem overly harsh to the more flexible and pragmatic Sunrise. Meanwhile, Sunrise's focus on efficiency and practical results might frustrate Kremlin, who values deep conviction and moral integrity over quick outcomes.

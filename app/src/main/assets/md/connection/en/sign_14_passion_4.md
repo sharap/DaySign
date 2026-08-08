@@ -1,0 +1,2 @@
+Jaguar may perceive Seed as overly focused on material gains and lacking in precision, while Seed might see Jaguar as too rigid and harsh in judgment.  
+Jaguar’s need for clear, decisive action can clash with Seed’s more flexible, adaptive approach, leading to misunderstandings about priorities and methods.

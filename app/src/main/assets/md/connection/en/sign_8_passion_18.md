@@ -1,0 +1,2 @@
+1. The Sun (Voskhod) values efficiency, simplicity, and adaptability, often prioritizing quick results and practical outcomes, while the Flint (Kremny) emphasizes unwavering principles, justice, and personal integrity, sometimes at the cost of flexibility and compromise.  
+2. While the Sun thrives on freedom and spontaneous action, the Flint demands consistency, deep conviction, and a steadfast moral compass, which can lead to clashes when the Sun’s pragmatism seems reckless or the Flint’s rigidity appears inflexible.

@@ -1,0 +1,1 @@
+The Ladder is supported by the Grain through its practicality and resourcefulness, helping the Ladder turn ideals into tangible results with efficiency and resilience. In turn, the Grain benefits from the Ladder’s discipline and clarity, gaining structure and purpose to channel its boundless energy wisely.

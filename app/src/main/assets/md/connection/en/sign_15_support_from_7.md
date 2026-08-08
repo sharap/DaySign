@@ -1,0 +1,1 @@
+The Eagle (Orla) supports the Deer (Olen) by providing logic, discipline, and strategic thinking, helping him avoid reckless decisions despite his natural intuition and charm. In turn, the Deer inspires the Eagle with spontaneity, passion, and a zest for life, balancing his rational nature with emotional warmth and creativity.

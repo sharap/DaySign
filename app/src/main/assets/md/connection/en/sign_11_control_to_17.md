@@ -1,0 +1,1 @@
+The Master controls the Earthquake by channeling his innate talents and mental agility to transform dreams and fantasies into structured, creative actions, preventing emotional buildup. Through focused purpose and self-discipline, he redirects the Earthquake’s intense imagination toward constructive goals, turning potential inner turmoil into innovative solutions.

@@ -1,0 +1,1 @@
+Grief controls the Wind by channeling its restless energy through deep emotional insight and unwavering moral clarity, transforming chaotic impulses into purposeful action. Through introspection and a relentless pursuit of truth, he tames the storm of the Wind with the steady light of his sensitive intellect.

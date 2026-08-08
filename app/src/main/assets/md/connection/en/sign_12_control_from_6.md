@@ -1,0 +1,2 @@
+The Skull’s calm resilience and patient perseverance counterbalance the Ladder’s rigid order, teaching it that true strength lies not in control, but in enduring stillness.  
+Through quiet endurance and deep memory, the Skull gently guides the Ladder away from moral rigidity, showing that wisdom often resides in acceptance, not correction.

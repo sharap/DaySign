@@ -1,0 +1,1 @@
+The Bamboo (Trostnik) supports the World Tree by providing strength, resilience, and unwavering determination, helping it grow through obstacles and maintain its natural, grounded essence. In turn, the World Tree nourishes the Bamboo with deep intuition and harmony, grounding its ambitious energy in the wisdom of nature.

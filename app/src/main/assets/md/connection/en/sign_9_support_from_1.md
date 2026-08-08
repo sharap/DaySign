@@ -1,0 +1,1 @@
+Water is supported by the World Tree through a deep connection to natural instincts and inner intuition, allowing it to draw strength from the Earth's hidden forces during crises. The World Tree nurtures Water’s untapped potential, helping it transform chaos into creativity and turn hidden reserves into life-saving energy when needed most.

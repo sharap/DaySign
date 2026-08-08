@@ -1,0 +1,1 @@
+The Flint (Kremny) supports the Skull (Cherep) by providing unwavering determination and strength of will, helping the Skull stay focused and resolute in the face of challenges. In turn, the Skull's patience and strategic calmness help the Flint avoid impulsive decisions, balancing its fiery resolve with thoughtful caution.

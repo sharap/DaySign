@@ -1,0 +1,2 @@
+The Eagle's logical strength and calm rationality help the Night overcome emotional turbulence, providing clarity and strategic thinking in difficult situations.  
+In turn, the Night's deep intuition and emotional sensitivity enrich the Eagle’s perspective, helping him balance intellect with empathy and perceive what logic alone cannot.

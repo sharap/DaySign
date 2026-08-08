@@ -1,0 +1,1 @@
+Night governs Water by channeling its inner depth and hidden potential, transforming emotional intensity into focused determination. Water, in turn, tempers Night’s introspection with sudden bursts of creative energy, turning inner struggles into extraordinary resilience.

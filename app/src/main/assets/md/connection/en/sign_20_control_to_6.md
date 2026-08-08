@@ -1,0 +1,2 @@
+The Master controls the Skull not through force, but by subtly guiding emotions and situations with calm authority, ensuring that all actions align with his hidden design.  
+The Skull, in turn, resists the Master’s influence not with defiance, but through patient stillness, using inner strength and memory to outlast any attempt at manipulation.

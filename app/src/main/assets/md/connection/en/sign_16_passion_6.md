@@ -1,0 +1,2 @@
+Griph’s emotional intensity and directness may clash with the Skull’s calm restraint and patience, as the former seeks immediate emotional clarity while the latter prefers to wait and observe.  
+Griph’s passionate pursuit of truth and justice might frustrate the Skull’s cautious, long-term approach, which values stability over sudden change.

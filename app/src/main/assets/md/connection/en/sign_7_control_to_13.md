@@ -1,0 +1,2 @@
+The Deer's intuitive charm and natural magnetism subtly guide the Bamboo's relentless drive, channeling its boundless energy toward balanced, fulfilling goals rather than unchecked ambition.  
+In turn, the Bamboo's steadfast focus and perseverance help the Deer stay grounded, transforming fleeting desires into sustained, meaningful achievements.

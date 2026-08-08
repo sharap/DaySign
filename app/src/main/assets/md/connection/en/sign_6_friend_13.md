@@ -1,0 +1,1 @@
+A friendship between a Skull and a Reed is built on deep mutual respect: the Skull’s calm strength and patience provide stability and wisdom, while the Reed’s relentless drive and passion bring energy and growth. Together, they balance each other—where one is steady, the other moves forward, creating a bond that is both enduring and inspiring.

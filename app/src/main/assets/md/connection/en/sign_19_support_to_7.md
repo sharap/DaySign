@@ -1,0 +1,1 @@
+The Storm provides the Ocelot with intense emotional depth and inner power, fueling his boldness and ability to overcome obstacles. In turn, the Ocelot’s charm and instinctive insight help the Storm channel its turbulent energy into creative and transformative expressions.

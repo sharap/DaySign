@@ -1,0 +1,1 @@
+The Skull is supported by the Flint through its unwavering inner strength and patient perseverance, as Flint’s determination and resilience help the Skull stay focused and calm in adversity. In turn, the Skull’s calm wisdom and deep intuition guide Flint to avoid rash decisions, balancing its fiery resolve with thoughtful restraint.

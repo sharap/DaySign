@@ -1,0 +1,1 @@
+The Snake (Zmei) exerts control over the Master by channeling his innate talents through sudden, intense bursts of inspiration and emotional depth, transforming passive potential into dynamic action. This control manifests as a spiritual awakening that compels the Master to transcend self-satisfaction and use his gifts for profound, transformative purposes.

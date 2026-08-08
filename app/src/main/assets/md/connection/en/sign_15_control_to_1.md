@@ -1,0 +1,1 @@
+The Eagle, with its logical intellect and calm rationality, acts as a guiding force that channels the World Tree’s raw instincts and emotional intensity into disciplined, purposeful actions. By applying reason and foresight, the Eagle helps the World Tree transform its powerful impulses into constructive, balanced expression.

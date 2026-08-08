@@ -1,0 +1,1 @@
+Trostnik controls the Storm by channeling its intense emotions into focused, persistent action, transforming chaos into structured progress. He grounds the Storm’s volatility with unwavering determination and practicality, turning its turbulent energy into steady, measurable growth.

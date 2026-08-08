@@ -1,0 +1,1 @@
+The Master is supported by the Night through deep focus, inner strength, and the ability to persevere silently toward long-term goals. The Night’s introspective nature helps the Master refine his talents through patience and emotional resilience, turning inner struggles into profound wisdom.

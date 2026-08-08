@@ -1,0 +1,1 @@
+The Griffin’s deep sensitivity and introspective nature allow him to channel the Wind’s chaotic energy into focused insight, transforming raw intuition into profound understanding. By seeking truth and purity in all things, he tames the Wind’s unpredictability with disciplined inner clarity.

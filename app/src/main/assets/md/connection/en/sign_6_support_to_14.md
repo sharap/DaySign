@@ -1,0 +1,1 @@
+The Skull provides the Jaguar with calmness and strategic patience, balancing the Jaguar’s energetic drive with deep inner strength and foresight. Together, they form a powerful synergy: the Jaguar’s sharp action is guided by the Skull’s wisdom, ensuring lasting success without haste.

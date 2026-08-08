@@ -1,0 +1,1 @@
+The Storm Master supports the Storm by channeling intense emotions into creative and transformative energy, turning inner turbulence into powerful artistic or intellectual expression. Through the Master’s natural insight and adaptability, the Storm finds balance, transforming passion into purpose and chaos into clarity.

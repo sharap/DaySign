@@ -1,0 +1,1 @@
+The Grain (Zerno) controls the Dog (Sobaka) by channeling its intense emotions and boundless energy into practical, goal-oriented actions, transforming raw passion into tangible results. Through discipline, moderation, and a focus on measurable outcomes, the Grain tempers the Dog’s impulsiveness, turning emotional highs into sustainable progress.

@@ -1,0 +1,2 @@
+Lestnitsa (the Ladder) values order, logic, and stability, while Vent (the Wind) thrives on freedom, spontaneity, and unpredictability—creating a natural tension between structure and chaos.  
+Lestnitsa seeks harmony through rules and moral clarity, whereas Vent embraces change and intuition, often challenging established norms and causing friction in their relationship.

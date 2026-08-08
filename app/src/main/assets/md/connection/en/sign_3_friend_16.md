@@ -1,0 +1,1 @@
+People of the Night and the Grif form a deep, intuitive bond, as both value inner depth, honesty, and emotional authenticity. Their friendship thrives on mutual respect, shared introspection, and a quiet understanding that goes beyond words.

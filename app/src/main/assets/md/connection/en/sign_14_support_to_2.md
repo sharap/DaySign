@@ -1,0 +1,1 @@
+The Jaguar supports the Wind by grounding its restless energy with practicality and focus, helping it channel its intense ideas into tangible results. In turn, the Wind inspires the Jaguar with creativity and spontaneity, preventing it from becoming too rigid or overly pragmatic.

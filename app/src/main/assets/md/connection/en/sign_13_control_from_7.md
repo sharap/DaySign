@@ -1,0 +1,1 @@
+The Deer (Olen) subtly influences the Reed (Trostnik) by aligning with his relentless drive, offering intuitive guidance and opportunities that channel the Reed’s unstoppable energy toward achievable goals. In return, the Reed’s persistence and focus provide the Deer with the stability and execution power he often lacks, creating a balanced and mutually beneficial partnership.

@@ -1,0 +1,2 @@
+Orleans, with his logical, calm, and deliberate nature, may find the Zmei's unpredictable, emotional, and impulsive behavior confusing and irrational.  
+In turn, the Zmei might perceive the Orlean's cold intellect and cautiousness as emotional detachment and a lack of passion or spontaneity.

@@ -1,0 +1,1 @@
+Water supports Earthquake by providing hidden strength and resilience, allowing the dreamer to draw upon deep inner resources during crises. Earthquake, in turn, helps Water by channeling its latent energy into creative, imaginative solutions, transforming challenges into opportunities through visionary insight.

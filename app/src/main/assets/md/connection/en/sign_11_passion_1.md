@@ -1,0 +1,2 @@
+Masters, with their effortless talents and natural confidence, may struggle to find motivation without external challenges, while World Trees, driven by intense instincts and emotions, often act on impulse and may lack the discipline to channel their energy constructively.  
+Masters tend to rely on intellect and self-assurance, whereas World Trees follow intuition and raw emotion, leading to potential friction when one values logic and the other prioritizes feeling.

@@ -1,0 +1,1 @@
+The Ladder supports the Lord by grounding his magnetic energy with structure, logic, and a calm, balanced perspective, helping him channel his charisma into constructive, organized actions. In turn, the Lord inspires the Ladder with confidence and emotional depth, encouraging him to trust his inner strength and embrace life’s challenges with courage.

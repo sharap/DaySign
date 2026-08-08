@@ -1,0 +1,5 @@
+The Maya word CHICCHAN literally translates as "clear sign", and also as "sign of the snake" and "sign of the sky". The point is that the ancient root "chan" (in the modern language, "kan") has three equally valid meanings for the Maya at once: "snake", "heavens" and "to see". It is precisely this ambiguity of the word "chan" that explains the Indians' special attachment to the image of the Snake, which symbolically stands for Divine, or Higher, vision.
+
+The glyph of the Snake sign depicts a mat – in the Maya tradition it represents supreme power. For the Indians the mat was as familiar and self-evident a symbol of authority as a crown or a throne is for us. An important detail: on the Chicchan glyph the mat is always placed in the upper corner, and this points to a power that is not earthly but Heavenly. The second element of the glyph is a small snake that is either descending from beneath the mat down toward the earth or, on the contrary, climbing upward. Taken together, all this symbolically depicts the link between Heaven and Earth, between man and God.
+
+In short, the Snake sign embodies the connection between man and the higher powers.

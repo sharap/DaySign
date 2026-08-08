@@ -1,0 +1,1 @@
+Water controls Eagle by challenging his logic with intuition, revealing that true strength lies not only in reason but in the unexpected wisdom born from inner depths. When Eagle relies solely on intellect, Water quietly waits, ready to unleash hidden potential in crises—proving that wisdom often emerges not from calculation, but from the uncharted depths of the soul.

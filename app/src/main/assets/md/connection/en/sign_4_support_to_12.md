@@ -1,0 +1,1 @@
+The Zephyr supports the Ladder by bringing dynamic energy and practical resourcefulness, helping the Ladder turn ideas into tangible results with innovative efficiency. In turn, the Ladder’s structure and discipline help the Zephyr channel their boundless energy into focused, sustainable actions.

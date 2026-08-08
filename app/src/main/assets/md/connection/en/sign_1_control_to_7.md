@@ -1,0 +1,2 @@
+The World Tree governs the Elk by anchoring its wild impulses in natural harmony, channeling its primal energy toward authenticity and intuitive expression.  
+Through deep connection with nature and inner truth, the World Tree helps the Elk balance its desires with awareness, preventing it from being swept away by excess or chaos.

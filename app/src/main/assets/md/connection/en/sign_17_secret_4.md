@@ -1,0 +1,2 @@
+People born under the sign of Earthquake are dreamers who find joy in imagination and simple pleasures, their inner contentment often surpassing material fulfillment.  
+Those born under the sign of Seed, in contrast, channel their abundant energy into practical action, transforming hidden potentials into tangible success through resourcefulness and relentless drive.

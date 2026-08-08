@@ -1,0 +1,1 @@
+The seed symbolizes growth, practicality, and the ability to turn resources into success through energy and observation, while the earthquake represents inner depth, hidden emotional power, and the risk of suppressed realities erupting when ignored—yet both share a profound connection to the balance between action and inner harmony.

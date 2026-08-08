@@ -1,0 +1,1 @@
+The Eagle (Орел) exercises control over the World Tree (Мировое Дерево) by channeling its raw, instinctual energy through disciplined logic and rational analysis, transforming primal impulses into structured purpose. In doing so, the Eagle guides the World Tree’s passionate, intuitive nature toward balanced, thoughtful action, harmonizing instinct with intellect.

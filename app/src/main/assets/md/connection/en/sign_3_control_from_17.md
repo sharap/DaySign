@@ -1,0 +1,2 @@
+The earthquake's influence over the Night sign lies in its ability to disrupt deep introspection with sudden, intense emotional waves, forcing the introspective Night to confront reality rather than retreat into inner worlds.  
+In turn, the Night’s calm endurance and inner strength help the earthquake’s restless energy find balance, preventing emotional eruptions and channeling its intensity into focused, purposeful action.

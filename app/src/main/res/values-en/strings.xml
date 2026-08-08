@@ -57,4 +57,58 @@
         <item>to Thunderstorm</item>
         <item>to Lord</item>
     </string-array>
+    <string-array name="daysign_names_genitive">
+        <item></item>
+        <item>World Tree</item>
+        <item>Wind</item>
+        <item>Night</item>
+        <item>Grain</item>
+        <item>Snake</item>
+        <item>Skull</item>
+        <item>Deer</item>
+        <item>Sunrise</item>
+        <item>Water</item>
+        <item>Dog</item>
+        <item>Master</item>
+        <item>Staircase</item>
+        <item>Reed</item>
+        <item>Jaguar</item>
+        <item>Eagle</item>
+        <item>Vulture</item>
+        <item>Earthquake</item>
+        <item>Flint</item>
+        <item>Thunderstorm</item>
+        <item>Lord</item>
+    </string-array>
+    <string-array name="daysign_names_accusative">
+        <item></item>
+        <item>World Tree</item>
+        <item>Wind</item>
+        <item>Night</item>
+        <item>Grain</item>
+        <item>Snake</item>
+        <item>Skull</item>
+        <item>Deer</item>
+        <item>Sunrise</item>
+        <item>Water</item>
+        <item>Dog</item>
+        <item>Master</item>
+        <item>Staircase</item>
+        <item>Reed</item>
+        <item>Jaguar</item>
+        <item>Eagle</item>
+        <item>Vulture</item>
+        <item>Earthquake</item>
+        <item>Flint</item>
+        <item>Thunderstorm</item>
+        <item>Lord</item>
+    </string-array>
+
+    <string name="about">About</string>
+    <string name="about_title">About the app DaySign</string>
+    <string name="about_p1">An adapted version of the Mayan Tzolkin calendar application, with some modifications.</string>
+    <string name="about_p2">It is intended for those who are interested in the sacred calendar of the Maya Indians.</string>
+    <string name="about_p3">All texts and illustrations in the app are original.</string>
+    <string name="about_version">Version 1.0.2, 09.08.2025</string>
+    <string name="back">Back</string>
 </resources>

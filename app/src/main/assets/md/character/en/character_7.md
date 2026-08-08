@@ -1,0 +1,21 @@
+In the Maya book "Omens of the Days", the Deer is described in these words: "His claws are in blood." To a European such a phrase may sound cruel, but the Maya themselves put – and still put – quite a different meaning into this image: luck in the hunt, the ability to bring home the prize and to carry what was planned through to a result.
+
+Beyond that, the Maya credited a person born under this sign with pride, a love of freedom and a taste for pleasure and the good things in life. What sets the Deer person apart above all is independence and the habit of relying on his own judgment. He knows clearly what he expects from life, cannot stand anyone meddling in his affairs, behaves in a fairly headstrong way – and still manages to get what he wants.
+
+Curiously, the Russian saying "the game runs to meet the hunter" describes the Deer with remarkable accuracy. By some unknown law of Nature, his clear idea of his own goals draws people to him. Without noticing it themselves, those around him begin to meet him halfway – helping with his affairs, sending profitable offers his way. Where someone else would have to make a considerable effort to get a prospective partner interested in a project, the Deer sometimes needs no more than an ordinary conversation. One gets the feeling that in business Nature has given him a head start.
+
+The Deer would do well to remember, though, that this unconscious goodwill is a kind of advance, and sooner or later he will have to earn it with real deeds. Yet even if that never happens, the same hidden laws of Nature keep working in his favor: even the Deer's obvious blunders rarely seriously annoy those around him. As a rule, his failure simply ends with the project being wound down, and the Deer goes off in search of a new goal.
+
+In business generally, the Deer trusts intuition more than logic – and it is intuition that points him to the most advantageous spot even in ventures that are not going especially well. A vivid example is the life of a remarkable man known to history as Count Cagliostro. Born under the Deer sign, Cagliostro somehow managed to convince everyone around him of his extraordinary mystical gifts. He was received in the highest circles, conversed with kings, persuaded his contemporaries that he was immortal and could produce gold out of nothing – but, alas, he ended his bright and adventurous life in an Italian prison.
+
+All of this shows that, lucky as he is, the Deer will lose nothing by learning a sense of proportion and caution – qualities he genuinely needs.
+
+Deer people usually love travel, have a weakness for beautiful things, throw a festive dinner on any pretext – or none at all – and plunge headlong into romantic adventures without a backward glance (though they are unlikely to forgive a partner the same lightness in love). All of this hides a serious danger: in the pursuit of pleasure it is easy to lose one's sense of measure and give in to the eternal temptations of gluttony or drink.
+
+This sign has another pitfall as well: in itself it contains no morality at all. The Deer's moral bearings are set by his desires and passions. If no one explained to him from an early age what is allowed and what is not, where good lies and where evil, the energy of the sign can become truly dangerous – such a Deer is capable of turning into a ruthless predator.
+
+Be that as it may, the Deer's life is built not around any clear plan but first and foremost around his desires. And those desires can be of the most varied kinds. It is wonderful if they pour into creative work, because the Deer's emotions are contagious – in the very best sense of the word.
+
+Of course, far from every Deer becomes a creator, let alone a genius, but almost all people of this sign share a zest for life. Most often it shows in the fact that the Deer reaches first of all for the material benefits of civilization. One could hardly call him especially greedy for money – hoarding is foreign to him. For him money is merely a tool for obtaining the comforts of life, and he needs those comforts in order to spend them with the greatest possible pleasure.
+
+In other words, generous Nature has opened up enormous opportunities for the Deer to obtain the good things in life. The main thing is to manage that generosity wisely.

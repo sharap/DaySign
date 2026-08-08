@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PeopleScreen(viewModel: MainViewModel, onBack: () -> Unit) {
+fun PeopleScreen(viewModel: MainViewModel) {
     val people by viewModel.people.collectAsState()
     val groups by viewModel.groups.collectAsState()
     
@@ -33,12 +33,7 @@ fun PeopleScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Люди и Группы") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
+                title = { Text("Люди и Группы") }
             )
         },
         floatingActionButton = {

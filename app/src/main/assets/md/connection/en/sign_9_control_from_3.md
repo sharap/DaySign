@@ -1,0 +1,1 @@
+Night exerts control over Water by channeling its hidden potential into focused, inner-directed strength, transforming emotional depth into resilience and silent determination. Through introspection and endurance, Night teaches Water to harness its latent power not in chaos, but in quiet, purposeful action.

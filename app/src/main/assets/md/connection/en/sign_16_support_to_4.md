@@ -1,0 +1,1 @@
+The Grif supports the Seed by bringing depth, clarity, and emotional honesty to its practical ambitions, helping it see beyond mere results to the true essence of its goals. In turn, the Seed grounds the Grif’s intense feelings with stability and tangible action, turning visionary insights into real-world achievements.

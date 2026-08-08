@@ -1,0 +1,1 @@
+Cherub and Griffin may clash due to their opposing approaches: Cherub’s calm, patient, and reserved nature may seem passive or indifferent to the passionate, direct, and emotionally intense Griffin, while Griffin’s intensity and need for immediate clarity may frustrate Cherub’s deliberate, long-term, and contemplative style.

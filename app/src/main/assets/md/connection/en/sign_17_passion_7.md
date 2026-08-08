@@ -1,0 +1,2 @@
+People of the Earthquake sign tend to live in their fantasies and avoid real problems, while the Deer sign is naturally goal-oriented and driven by clear desires, often leading to conflict between idealism and practical action.  
+The Earthquake’s tendency to escape reality through imagination may clash with the Deer’s instinctive pursuit of tangible goals and immediate gratification.

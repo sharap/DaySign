@@ -1,0 +1,1 @@
+The Olen and the Jaguar are complementary forces: the Olen, guided by intuition and desire, attracts opportunities and people, while the Jaguar, grounded in logic and precision, channels those opportunities into concrete, successful actions. Together, they form a perfect balance—dream and execution, inspiration and implementation.

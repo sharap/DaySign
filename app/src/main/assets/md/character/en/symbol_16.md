@@ -1,0 +1,5 @@
+Vulture is the name the K'iche' Maya and the Aztecs give this sign, while the Maya word CIB literally means "wax" and goes back to the root "kib" - "cleansing". The point is that the ancient Maya did not use wax at all and regarded it as waste. Later, when after European colonization the Indians began making candles out of wax, the original meaning of the word "kib" gradually faded from memory, and it came to denote a wax candle. Thus the "Book of the Order of Days" says: "On the day Cib the Lord created the first candle, and light appeared where there was neither sun nor moon."
+
+The glyph of the sign Cib is a stylized image of a honeycomb from which honey is being pressed (the pressing itself is conveyed by the curved spiral in the center of the glyph). In the Maya system of imagery this holds a simple idea: to reach what is useful by discarding everything superfluous and unnecessary.
+
+Thus the sign Cib, or Vulture, personifies cleansing and clarity - in every possible meaning of these words.

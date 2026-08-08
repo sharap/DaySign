@@ -1,0 +1,1 @@
+The Olen (Deer) supports the Eagle (Orla) by bringing intuition, spontaneity, and a natural ability to attract opportunities, helping the Eagle navigate life’s uncertainties with ease. In turn, the Eagle provides the Olen with logic, discipline, and strategic thinking, grounding the Olen’s impulses and helping them turn inspiration into lasting success.

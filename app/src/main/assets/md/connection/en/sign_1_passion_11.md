@@ -1,0 +1,2 @@
+The World Tree, driven by instinct and natural impulses, may clash with the Master’s intellectual detachment and tendency to overthink, leading to frustration when the Master fails to act on the World Tree’s urgent emotional signals.  
+Conversely, the Master’s need for mental stimulation and effortless achievement may feel stifling to the World Tree, whose raw, spontaneous emotions require space and freedom rather than analysis.

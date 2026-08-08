@@ -1,0 +1,1 @@
+Wind and Storm are two sides of the same elemental force—Wind brings the breath of change and freedom, while Storm embodies its powerful, passionate manifestation. Together, they represent the dynamic interplay between inner movement and outer intensity, where inspiration meets transformation.

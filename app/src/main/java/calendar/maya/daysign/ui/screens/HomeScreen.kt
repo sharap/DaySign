@@ -30,7 +30,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: MainViewModel, onNavigateToPeople: () -> Unit) {
+fun HomeScreen(viewModel: MainViewModel) {
     val mayaDate by viewModel.currentMayaDate.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
@@ -75,32 +75,8 @@ fun HomeScreen(viewModel: MainViewModel, onNavigateToPeople: () -> Unit) {
                         "${mayaDate.longCount.baktun}.${mayaDate.longCount.katun}.${mayaDate.longCount.tun}.${mayaDate.longCount.uinal}.${mayaDate.longCount.day}",
                         fontSize = 18.sp
                     )
-                },
-                actions = {
-                    IconButton(onClick = onNavigateToPeople) {
-                        Icon(Icons.Default.Person, contentDescription = "People")
-                    }
                 }
             )
-        },
-        bottomBar = {
-            BottomAppBar {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = { viewModel.backDay() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                    Button(onClick = { viewModel.setCurrentDate(LocalDate.now()) }) {
-                        Text("Сегодня")
-                    }
-                    IconButton(onClick = { viewModel.nextDay() }) {
-                        Icon(Icons.Default.ArrowForward, contentDescription = "Forward")
-                    }
-                }
-            }
         }
     ) { innerPadding ->
         Column(

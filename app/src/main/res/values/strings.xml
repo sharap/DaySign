@@ -40,9 +40,9 @@
         <item>в Ветер</item>
         <item>в Ночь</item>
         <item>в Зерно</item>
-        <item>в Змей</item>
+        <item>в Змея</item>
         <item>в Череп</item>
-        <item>в Олень</item>
+        <item>в Оленя</item>
         <item>в Восход</item>
         <item>в Воду</item>
         <item>в Собаку</item>
@@ -57,4 +57,59 @@
         <item>в Грозу</item>
         <item>во Владыку</item>
     </string-array>
+
+    <string-array name="daysign_names_genitive">
+        <item></item>
+        <item>Мирового дерева</item>
+        <item>Ветра</item>
+        <item>Ночи</item>
+        <item>Зерна</item>
+        <item>Змея</item>
+        <item>Черепа</item>
+        <item>Оленя</item>
+        <item>Восхода</item>
+        <item>Воды</item>
+        <item>Собаки</item>
+        <item>Мастера</item>
+        <item>Лестницы</item>
+        <item>Тростника</item>
+        <item>Ягуара</item>
+        <item>Орла</item>
+        <item>Грифа</item>
+        <item>Землетрясения</item>
+        <item>Кремня</item>
+        <item>Грозы</item>
+        <item>Владыки</item>
+    </string-array>
+
+    <string-array name="daysign_names_accusative">
+        <item></item>
+        <item>Мировое дерево</item>
+        <item>Ветер</item>
+        <item>Ночь</item>
+        <item>Зерно</item>
+        <item>Змея</item>
+        <item>Череп</item>
+        <item>Оленя</item>
+        <item>Восхода</item>
+        <item>Воду</item>
+        <item>Собаку</item>
+        <item>Мастера</item>
+        <item>Лестницу</item>
+        <item>Тростник</item>
+        <item>Ягуара</item>
+        <item>Орла</item>
+        <item>Грифа</item>
+        <item>Землетрясение</item>
+        <item>Кремня</item>
+        <item>Грозу</item>
+        <item>Владыку</item>
+    </string-array>
+    <string name="about">О приложении</string>
+    <string name="about_title">О приложении DaySign</string>
+    <string name="about_p1">Адаптированное приложение майанского календаря Цолькин, с некоторыми модификациями.</string>
+    <string name="about_p2">Предназначено для тех, кто увлекается священным календарём индейцев майа.</string>
+    <string name="about_p3">Все тексты и иллюстрации в приложении — авторские.</string>
+    <string name="about_version">Версия 1.0.2 от 09.08.2025</string>
+    <string name="back">Назад</string>
 </resources>

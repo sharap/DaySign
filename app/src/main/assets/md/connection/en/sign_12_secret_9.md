@@ -1,0 +1,2 @@
+The Ladder represents order, logic, and a deep sense of justice, while Water embodies hidden potential, resilience in crisis, and the ability to transform chaos into solutions—complementing each other as structure and adaptability in life’s journey.  
+Together, they symbolize the balance between disciplined planning and the unexpected power that emerges when inner strength is called upon in times of need.

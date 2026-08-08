@@ -1,0 +1,1 @@
+The Night and Flint share a hidden bond: both are marked by deep inner strength, resilience, and a solitary focus that turns personal trials into sources of wisdom and power. While Night channels introspection and emotional depth into profound insight, Flint channels unwavering will and clarity into relentless achievement—two sides of the same enduring spirit.

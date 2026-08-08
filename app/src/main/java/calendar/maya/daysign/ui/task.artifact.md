@@ -1,0 +1,6 @@
+- [x] Create CalendarScreen stub
+- [x] Create CharactersScreen stub
+- [x] Update MainActivity with Pager and NavigationBar
+- [x] Clean up HomeScreen (removed local navigation and bottom bar)
+- [x] Clean up PeopleScreen (removed back button)
+- [x] Add material-icons-extended dependency

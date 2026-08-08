@@ -1,0 +1,2 @@
+The earthquake sign governs the night sign by channeling its deep emotional intensity into creative fantasy, allowing the dreamer to transcend pain through imagination, while simultaneously urging the introspective soul to confront hidden burdens before they erupt like tectonic forces.  
+In this balance, the night’s inward focus is tempered by the earthquake’s capacity for joy, teaching that true fulfillment comes not from escaping reality, but from embracing it with both imagination and courage.

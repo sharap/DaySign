@@ -1,0 +1,1 @@
+Zmei and Orёl often clash due to their contrasting approaches: Zmei relies on intuition, sudden impulses, and deep emotional waves, while Orёl depends on logic, careful analysis, and rational planning. This fundamental difference can lead to misunderstandings—Zmei may see Orёl as cold and rigid, while Orёl may perceive Zmei as unpredictable and irrational.

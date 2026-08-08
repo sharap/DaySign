@@ -1,0 +1,2 @@
+The Reed (Trostnik) embodies relentless growth and unwavering persistence, while the Rising (Voskhod) represents practical efficiency and dynamic progress—combined, they form a powerful synergy of unstoppable ambition and decisive action.  
+Together, they symbolize the drive to break through barriers with steadfast determination, guided by a clear, results-oriented vision.

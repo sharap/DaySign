@@ -1,0 +1,1 @@
+The Lord subtly guides and harmonizes the energetic flow of the Ascendant, balancing their intense drive with calm authority and emotional intelligence. By intuitively shaping situations and relationships, the Lord ensures the Ascendant achieves their goals efficiently, while remaining centered and in control.

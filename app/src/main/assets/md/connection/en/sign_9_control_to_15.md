@@ -1,0 +1,1 @@
+Water exerts a subtle yet powerful influence over the Eagle, tempering his logical rigor with emotional depth and unpredictability, making him capable of sudden intuitive leaps in crisis. In turn, the Eagle’s rational discipline helps ground Water’s erratic energy, channeling its vast inner potential into structured, purposeful action.

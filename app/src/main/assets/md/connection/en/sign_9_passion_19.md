@@ -1,0 +1,1 @@
+Water and Thunder clash in their approach to life: Water thrives in hidden reserves, revealing strength only in crisis, while Thunder is constantly in motion, driven by intense emotions and seeking external expression. Water prefers quiet resilience and inner stillness, whereas Thunder demands attention, thrives on drama, and cannot remain unnoticed.

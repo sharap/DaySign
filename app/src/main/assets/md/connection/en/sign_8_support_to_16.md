@@ -1,0 +1,2 @@
+The Ascendant supports the Grif by grounding his deep emotions and intense introspection with practicality, focus, and a drive for efficiency, helping him turn profound insights into tangible results.  
+In turn, the Grif inspires the Ascendant to look beyond mere results, encouraging him to seek meaning, authenticity, and emotional depth in his pursuits.

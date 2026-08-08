@@ -1,0 +1,1 @@
+The Grain (Zern) is supported by the Griffin through practical wisdom and a keen eye for hidden potential, turning challenges into opportunities with resourceful ingenuity. The Griffin, in turn, inspires the Grain with depth of purpose and moral clarity, helping them channel their energy toward meaningful, authentic goals.

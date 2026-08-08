@@ -1,0 +1,1 @@
+The Reed supports the World Tree by channeling its relentless drive and unwavering focus into tangible growth, helping it stay grounded and purposeful amidst its powerful, instinctive energy. In turn, the World Tree inspires the Reed with deep intuition and emotional authenticity, reminding it to listen to inner impulses while still striving toward meaningful progress.
