@@ -26,12 +26,21 @@ import calendar.maya.daysign.ui.MainViewModel
 import calendar.maya.daysign.ui.components.ImageSign
 
 @Composable
-fun CharactersScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
+fun CharactersScreen(viewModel: MainViewModel, resetTrigger: Int = 0, targetCharacterId: Int? = null) {
     val navController = rememberNavController()
 
     LaunchedEffect(resetTrigger) {
         if (resetTrigger > 0) {
             navController.popBackStack(navController.graph.startDestinationId, false)
+        }
+    }
+
+    LaunchedEffect(targetCharacterId) {
+        targetCharacterId?.let { id ->
+            navController.navigate("detail/$id") {
+                // Avoid multiple instances on stack if needed
+                launchSingleTop = true
+            }
         }
     }
 

@@ -106,6 +106,36 @@ object MayaCalendar {
         return fns
     }
 
+    fun getKinConnections(
+        kin1Daysign: Int,
+        kin1Trecena: Int,
+        kin2Daysign: Int,
+        kin2Trecena: Int
+    ): List<Int> {
+        val allCons1 = listOf(getConnections(kin1Daysign), getConnections(kin1Trecena))
+        val signs2 = listOf(kin2Daysign, kin2Trecena)
+        val conTypes = IntArray(9)
+
+        for (cons in allCons1) {
+            for (sign in signs2) {
+                for (i in cons.indices) {
+                    if (sign == cons[i]) {
+                        conTypes[i]++
+                    }
+                }
+            }
+        }
+
+        if (kin1Daysign == kin2Trecena || kin1Trecena == kin2Daysign) {
+            conTypes[7]++
+        }
+        if (kin1Daysign == kin2Daysign || kin1Trecena == kin2Trecena) {
+            conTypes[8]++
+        }
+
+        return conTypes.toList()
+    }
+
     fun nextDay(date: LocalDate): LocalDate = date.plusDays(1)
     fun backDay(date: LocalDate): LocalDate = date.minusDays(1)
 }

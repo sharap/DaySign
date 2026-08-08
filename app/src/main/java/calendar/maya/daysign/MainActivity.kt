@@ -17,8 +17,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -42,6 +44,26 @@ class MainActivity : ComponentActivity() {
             val coroutineScope = rememberCoroutineScope()
             
             var charactersResetTrigger by remember { mutableIntStateOf(0) }
+            var peopleResetTrigger by remember { mutableIntStateOf(0) }
+            var calendarResetTrigger by remember { mutableIntStateOf(0) }
+            var targetCharacterId by remember { mutableStateOf<Int?>(null) }
+
+            LaunchedEffect(viewModel.navigateToCharacter) {
+                viewModel.navigateToCharacter.collect { characterId ->
+                    targetCharacterId = characterId
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(3)
+                    }
+                }
+            }
+
+            LaunchedEffect(viewModel.navigateToPage) {
+                viewModel.navigateToPage.collect { pageIndex ->
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pageIndex)
+                    }
+                }
+            }
 
             val navItems = listOf(
                 NavItem("Календарь", Icons.Default.CalendarMonth),
@@ -58,8 +80,12 @@ class MainActivity : ComponentActivity() {
                                 NavigationBarItem(
                                     selected = pagerState.currentPage == index,
                                     onClick = {
-                                        if (pagerState.currentPage == index && index == 3) {
-                                            charactersResetTrigger++
+                                        if (pagerState.currentPage == index) {
+                                            when (index) {
+                                                0 -> calendarResetTrigger++
+                                                2 -> peopleResetTrigger++
+                                                3 -> charactersResetTrigger++
+                                            }
                                         }
                                         coroutineScope.launch {
                                             pagerState.animateScrollToPage(index)
@@ -77,10 +103,15 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) { page ->
                         when (page) {
-                            0 -> CalendarScreen(viewModel)
+                            0 -> CalendarScreen(viewModel, calendarResetTrigger)
                             1 -> HomeScreen(viewModel)
-                            2 -> PeopleScreen(viewModel)
-                            3 -> CharactersScreen(viewModel, charactersResetTrigger)
+                            2 -> PeopleScreen(viewModel, peopleResetTrigger)
+                            3 -> {
+                                CharactersScreen(viewModel, charactersResetTrigger, targetCharacterId)
+                                if (targetCharacterId != null && pagerState.currentPage == 3) {
+                                    targetCharacterId = null
+                                }
+                            }
                             else -> {}
                         }
                     }

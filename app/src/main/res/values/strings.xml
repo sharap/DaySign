@@ -112,4 +112,53 @@
     <string name="about_p3">Все тексты и иллюстрации в приложении — авторские.</string>
     <string name="about_version">Версия 1.0.2 от 09.08.2025</string>
     <string name="back">Назад</string>
+
+    <string name="support_in">получает поддержку</string>
+    <string name="support_out">даёт поддержку</string>
+    <string name="control_in">контролирует</string>
+    <string name="control_out_male">контролируем</string>
+    <string name="control_out_female">контролируема</string>
+    <string name="friend">партнёр/друг</string>
+    <string name="passion">страсть/испытание</string>
+    <string name="secret">тайная сила</string>
+    <string name="aspirations">связь устремлений</string>
+    <string name="equal_sign">одинаковые знаки</string>
+    <string name="no_connected_male">не связан</string>
+    <string name="no_connected_female">не связана</string>
+
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
+    <string name="gender">Пол</string>
+    <string name="time_birth">Время рождения</string>
+    <string name="before_sunrise">До восхода</string>
+    <string name="after_sunrise">После восхода</string>
+    <string name="add_group">Добавить группу</string>
+    <string name="name_group">Название</string>
+    <string name="description_placeholder">краткое описание группы</string>
+    <string name="search">Поиск</string>
+    <string name="result_group">Результат взаимодействия</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+
+    <string name="map_connections">Карта связей с другими знаками</string>
+    <string name="info">Прочая информация</string>
+    <string name="character">Характер</string>
+    <string name="birth_gregorian">Дата рождения по григорианскому календарю</string>
+    <string name="birth_longcount">Дата рождения по длинному счету</string>
+    <string name="kin_label">Кин</string>
+    <string name="connections_people">Связи с другими людьми</string>
+
+    <string name="count_days">Дней от рождения до сегодня</string>
+    <string name="age_sign">Возрастной знак</string>
+    <string name="age_kin">Возрастной кин</string>
+    <string name="age_gregorian">Возраст (лет)</string>
+    <string name="next_maya_day">Ближайший майанский день рождения</string>
+
+    <string name="support">поддержка</string>
+    <string name="control">контроль</string>
+    <string name="kin_description">Немного про этот день</string>
+    <string name="equal_people">Люди с таким же знаком</string>
+    <string name="group_label">Группа</string>
+    <string name="influence_people">Влияние на людей</string>
 </resources>

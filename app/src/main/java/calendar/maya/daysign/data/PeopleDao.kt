@@ -14,12 +14,24 @@ interface PeopleDao {
     @Delete
     suspend fun deletePerson(person: PersonEntity)
 
+    @Query("SELECT * FROM people WHERE id = :id")
+    suspend fun getPersonById(id: Int): PersonEntity?
+
     @Query("SELECT * FROM user_groups")
     fun getAllGroups(): Flow<List<GroupEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGroup(group: GroupEntity)
+    suspend fun insertGroup(group: GroupEntity): Long
 
     @Delete
     suspend fun deleteGroup(group: GroupEntity)
+
+    @Query("SELECT * FROM user_groups WHERE id = :id")
+    suspend fun getGroupById(id: Int): GroupEntity?
+
+    @Query("DELETE FROM people")
+    suspend fun clearAllPeople()
+
+    @Query("DELETE FROM user_groups")
+    suspend fun clearAllGroups()
 }
