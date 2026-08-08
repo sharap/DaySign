@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Daysign</string>
+    <string name="people">Люди</string>
+    <string name="groups">Группы</string>
+    <string name="today">Сегодня</string>
+    <string name="description">Описание дня</string>
+    <string name="phantoms">Фантомы</string>
+    <string name="add_person">Добавить человека</string>
+    <string name="name">Имя</string>
+    <string name="birth_date">Дата рождения</string>
+    <string name="cancel">Отмена</string>
+    <string name="add">Добавить</string>
+
+    <string-array name="daysign_names">
+        <item></item>
+        <item>Мировое дерево</item>
+        <item>Ветер</item>
+        <item>Ночь</item>
+        <item>Зерно</item>
+        <item>Змей</item>
+        <item>Череп</item>
+        <item>Олень</item>
+        <item>Восход</item>
+        <item>Вода</item>
+        <item>Собака</item>
+        <item>Мастер</item>
+        <item>Лестница</item>
+        <item>Тростник</item>
+        <item>Ягуар</item>
+        <item>Орёл</item>
+        <item>Гриф</item>
+        <item>Землетрясение</item>
+        <item>Кремень</item>
+        <item>Гроза</item>
+        <item>Владыка</item>
+    </string-array>
+    <string-array name="daysign_names_to">
+        <item></item>
+        <item>в Мировое дерево</item>
+        <item>в Ветер</item>
+        <item>в Ночь</item>
+        <item>в Зерно</item>
+        <item>в Змей</item>
+        <item>в Череп</item>
+        <item>в Олень</item>
+        <item>в Восход</item>
+        <item>в Воду</item>
+        <item>в Собаку</item>
+        <item>в Мастера</item>
+        <item>в Лестницу</item>
+        <item>в Тростник</item>
+        <item>в Ягуара</item>
+        <item>в Орла</item>
+        <item>в Грифа</item>
+        <item>в Землетрясение</item>
+        <item>в Кремень</item>
+        <item>в Грозу</item>
+        <item>во Владыку</item>
+    </string-array>
+</resources>

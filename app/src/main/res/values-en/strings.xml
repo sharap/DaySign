@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Daysign</string>
+    <string name="people">People</string>
+    <string name="groups">Groups</string>
+    <string name="today">Today</string>
+    <string name="description">Day Description</string>
+    <string name="phantoms">Phantoms</string>
+    <string name="add_person">Add Person</string>
+    <string name="name">Name</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+
+    <string-array name="daysign_names">
+        <item></item>
+        <item>World Tree</item>
+        <item>Wind</item>
+        <item>Night</item>
+        <item>Grain</item>
+        <item>Snake</item>
+        <item>Skull</item>
+        <item>Deer</item>
+        <item>Sunrise</item>
+        <item>Water</item>
+        <item>Dog</item>
+        <item>Master</item>
+        <item>Staircase</item>
+        <item>Reed</item>
+        <item>Jaguar</item>
+        <item>Eagle</item>
+        <item>Vulture</item>
+        <item>Earthquake</item>
+        <item>Flint</item>
+        <item>Thunderstorm</item>
+        <item>Lord</item>
+    </string-array>
+    <string-array name="daysign_names_to">
+        <item></item>
+        <item>to World Tree</item>
+        <item>to Wind</item>
+        <item>to Night</item>
+        <item>to Grain</item>
+        <item>to Snake</item>
+        <item>to Skull</item>
+        <item>to Deer</item>
+        <item>to Sunrise</item>
+        <item>to Water</item>
+        <item>to Dog</item>
+        <item>to Master</item>
+        <item>to Staircase</item>
+        <item>to Reed</item>
+        <item>to Jaguar</item>
+        <item>to Eagle</item>
+        <item>to Vulture</item>
+        <item>to Earthquake</item>
+        <item>to Flint</item>
+        <item>to Thunderstorm</item>
+        <item>to Lord</item>
+    </string-array>
+</resources>
