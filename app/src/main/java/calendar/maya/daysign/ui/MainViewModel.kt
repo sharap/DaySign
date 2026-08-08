@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import calendar.maya.daysign.ui.widget.DaysignWidget
+import androidx.glance.appwidget.updateAll
 import java.time.LocalDate
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -103,12 +105,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addPerson(person: Person) {
         viewModelScope.launch {
             dao.insertPerson(person.toEntity())
+            DaysignWidget().updateAll(getApplication())
         }
     }
 
     fun deletePerson(person: Person) {
         viewModelScope.launch {
             dao.deletePerson(person.toEntity())
+            DaysignWidget().updateAll(getApplication())
         }
     }
 
@@ -175,6 +179,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 dao.clearAllGroups()
                 newPeople.forEach { dao.insertPerson(it) }
                 newGroups.forEach { dao.insertGroup(it) }
+                DaysignWidget().updateAll(getApplication())
             } catch (e: Exception) {
                 e.printStackTrace()
             }

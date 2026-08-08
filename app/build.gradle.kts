@@ -55,6 +55,10 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.3")
     
+    // Glance (Widgets)
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
+    
     // Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
