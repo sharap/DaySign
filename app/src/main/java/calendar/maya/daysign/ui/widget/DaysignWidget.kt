@@ -26,6 +26,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import androidx.work.*
 import calendar.maya.daysign.MainActivity
 import calendar.maya.daysign.R
 import calendar.maya.daysign.data.AppDatabase
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 
 class DaysignWidget : GlanceAppWidget() {
 
@@ -190,6 +192,26 @@ class DaysignWidget : GlanceAppWidget() {
             else -> R.drawable.ic_launcher_foreground
         }
     }
+
+    companion object {
+        private const val WORK_NAME = "WidgetUpdateWorker"
+
+        fun scheduleUpdate(context: Context) {
+            val workRequest = PeriodicWorkRequestBuilder<WidgetUpdateWorker>(
+                1, TimeUnit.HOURS
+            ).build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest
+            )
+        }
+
+        fun cancelUpdate(context: Context) {
+            WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+        }
+    }
 }
 
 class RefreshAction : ActionCallback {
@@ -200,4 +222,14 @@ class RefreshAction : ActionCallback {
 
 class DaysignWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = DaysignWidget()
+
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        DaysignWidget.scheduleUpdate(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        DaysignWidget.cancelUpdate(context)
+    }
 }

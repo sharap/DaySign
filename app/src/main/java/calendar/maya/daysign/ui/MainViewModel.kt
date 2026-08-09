@@ -179,6 +179,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val id = dao.insertGroup(group.toEntity())
             onCreated?.invoke(id.toInt())
+            DaysignWidget().updateAll(getApplication())
         }
     }
 
@@ -189,6 +190,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (personId !in it.memberIds) {
                     val updatedIds = it.memberIds + personId
                     dao.insertGroup(it.copy(memberIds = updatedIds).toEntity())
+                    DaysignWidget().updateAll(getApplication())
                 }
             }
         }
@@ -200,6 +202,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 setDefaultGroup(null)
             }
             dao.deleteGroup(group.toEntity())
+            DaysignWidget().updateAll(getApplication())
         }
     }
 

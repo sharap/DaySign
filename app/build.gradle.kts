@@ -65,6 +65,9 @@ dependencies {
     implementation("androidx.compose.material3.adaptive:adaptive-layout:1.0.0")
     implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.0.0")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.1")
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
     
     // Room
     val room_version = "2.6.1"
