@@ -59,6 +59,12 @@ dependencies {
     implementation("androidx.glance:glance-appwidget:1.1.1")
     implementation("androidx.glance:glance-material3:1.1.1")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // Adaptive Layouts
+    implementation("androidx.compose.material3.adaptive:adaptive:1.0.0")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout:1.0.0")
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.0.0")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.1")
     
     // Room
     val room_version = "2.6.1"

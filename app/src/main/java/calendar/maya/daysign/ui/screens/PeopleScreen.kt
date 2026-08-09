@@ -7,18 +7,17 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Input
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Input
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,8 +42,10 @@ import calendar.maya.daysign.ui.components.ImageSign
 import calendar.maya.daysign.ui.components.SignChips
 import java.time.LocalDate
 
+enum class PeopleScreenMode { ALL, PEOPLE_ONLY, GROUPS_ONLY }
+
 @Composable
-fun PeopleScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
+fun PeopleScreen(viewModel: MainViewModel, resetTrigger: Int = 0, mode: PeopleScreenMode = PeopleScreenMode.ALL) {
     val navController = rememberNavController()
     val pendingPersonId by viewModel.pendingPersonId.collectAsState()
 
@@ -65,8 +66,9 @@ fun PeopleScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
 
     NavHost(navController = navController, startDestination = "list") {
         composable("list") {
-            PeopleListScreen(
+            PeopleListScreenAdaptive(
                 viewModel = viewModel,
+                mode = mode,
                 onNavigateToPerson = { navController.navigate("person/$it") },
                 onNavigateToGroup = { navController.navigate("group/$it") },
                 onNavigateToImport = { navController.navigate("import") }
@@ -108,8 +110,9 @@ fun PeopleScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PeopleListScreen(
+fun PeopleListScreenAdaptive(
     viewModel: MainViewModel,
+    mode: PeopleScreenMode = PeopleScreenMode.ALL,
     onNavigateToPerson: (Int) -> Unit,
     onNavigateToGroup: (Int) -> Unit,
     onNavigateToImport: () -> Unit
@@ -119,65 +122,118 @@ fun PeopleListScreen(
     val groups by viewModel.groups.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     
-    var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf(stringResource(R.string.people), stringResource(R.string.groups))
-    
     var showAddPersonDialog by remember { mutableStateOf(false) }
     var showAddGroupDialog by remember { mutableStateOf(false) }
+
+    var selectedTab by remember { mutableIntStateOf(0) }
     
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.people)) },
+                title = { 
+                    Text(
+                        when(mode) {
+                            PeopleScreenMode.PEOPLE_ONLY -> stringResource(R.string.people)
+                            PeopleScreenMode.GROUPS_ONLY -> stringResource(R.string.groups)
+                            else -> stringResource(R.string.people)
+                        }
+                    ) 
+                },
                 actions = {
-                    IconButton(onClick = onNavigateToImport) {
-                        Icon(Icons.AutoMirrored.Filled.Input, contentDescription = "Import")
+                    if (mode != PeopleScreenMode.GROUPS_ONLY) {
+                        IconButton(onClick = onNavigateToImport) {
+                            Icon(Icons.AutoMirrored.Filled.Input, contentDescription = "Import")
+                        }
                     }
                 }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { 
-                if (selectedTab == 0) showAddPersonDialog = true 
-                else showAddGroupDialog = true
-            }) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
+            val showAddGroup = if (mode == PeopleScreenMode.ALL) selectedTab == 1 else mode == PeopleScreenMode.GROUPS_ONLY
+            val showAddPerson = if (mode == PeopleScreenMode.ALL) selectedTab == 0 else mode == PeopleScreenMode.PEOPLE_ONLY
+            
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (showAddGroup) {
+                    SmallFloatingActionButton(onClick = { showAddGroupDialog = true }) {
+                        Icon(Icons.Default.GroupAdd, contentDescription = "Add Group")
+                    }
+                }
+                if (showAddPerson) {
+                    FloatingActionButton(onClick = { showAddPersonDialog = true }) {
+                        Icon(Icons.Default.PersonAdd, contentDescription = "Add Person")
+                    }
+                }
             }
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            TabRow(selectedTabIndex = selectedTab) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        text = { 
-                            Text(if (index == 0) "$title (${allPeople.size})" else "$title (${groups.size})") 
-                        }
-                    )
-                }
-            }
+        BoxWithConstraints(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            val isWide = maxWidth > 700.dp
             
-            if (selectedTab == 0) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { viewModel.setSearchQuery(it) },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    placeholder = { Text(stringResource(R.string.search)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.setSearchQuery("") }) {
-                                Icon(Icons.Default.Close, contentDescription = "Clear")
+            if (isWide && mode == PeopleScreenMode.ALL) {
+                Row(modifier = Modifier.fillMaxSize()) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            stringResource(R.string.people) + " (${allPeople.size})",
+                            modifier = Modifier.padding(16.dp),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        OutlinedTextField(
+                            value = searchQuery,
+                            onValueChange = { viewModel.setSearchQuery(it) },
+                            modifier = Modifier.fillMaxWidth().padding(8.dp),
+                            placeholder = { Text(stringResource(R.string.search)) },
+                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
+                        )
+                        PeopleList(people, onClick = onNavigateToPerson, isWide = isWide)
+                    }
+                    VerticalDivider()
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            stringResource(R.string.groups) + " (${groups.size})",
+                            modifier = Modifier.padding(16.dp),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        GroupList(groups, viewModel = viewModel, onClick = onNavigateToGroup, isWide = isWide)
+                    }
+                }
+            } else {
+                val tabs = listOf(stringResource(R.string.people), stringResource(R.string.groups))
+                
+                Column {
+                    if (mode == PeopleScreenMode.ALL) {
+                        TabRow(selectedTabIndex = selectedTab) {
+                            tabs.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = selectedTab == index,
+                                    onClick = { selectedTab = index },
+                                    text = { 
+                                        Text(if (index == 0) "$title (${allPeople.size})" else "$title (${groups.size})") 
+                                    }
+                                )
                             }
                         }
                     }
-                )
-            }
-            
-            when (selectedTab) {
-                0 -> PeopleList(people, onClick = onNavigateToPerson)
-                1 -> GroupList(groups, viewModel = viewModel, onClick = onNavigateToGroup)
+                    
+                    if (mode == PeopleScreenMode.PEOPLE_ONLY || (mode == PeopleScreenMode.ALL && selectedTab == 0)) {
+                        OutlinedTextField(
+                            value = searchQuery,
+                            onValueChange = { viewModel.setSearchQuery(it) },
+                            modifier = Modifier.fillMaxWidth().padding(8.dp),
+                            placeholder = { Text(stringResource(R.string.search)) },
+                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                            trailingIcon = {
+                                if (searchQuery.isNotEmpty()) {
+                                    IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                                        Icon(Icons.Default.Close, contentDescription = "Clear")
+                                    }
+                                }
+                            }
+                        )
+                        PeopleList(people, onClick = onNavigateToPerson, isWide = isWide)
+                    } else if (mode == PeopleScreenMode.GROUPS_ONLY || (mode == PeopleScreenMode.ALL && selectedTab == 1)) {
+                        GroupList(groups, viewModel = viewModel, onClick = onNavigateToGroup, isWide = isWide)
+                    }
+                }
             }
         }
     }
@@ -206,45 +262,197 @@ fun PeopleListScreen(
 }
 
 @Composable
-fun PeopleList(people: List<Person>, onClick: (Int) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(people) { person ->
-            val mayaDate = if (person.sunrise == "before") {
-                MayaCalendar.maya(person.birthDate.minusDays(1))
-            } else {
-                MayaCalendar.maya(person.birthDate)
-            }
-            ListItem(
-                modifier = Modifier.clickable { onClick(person.id) },
-                headlineContent = { Text(person.name) },
-                supportingContent = { Text("${person.birthDate}, ${stringResource(R.string.kin_label)} ${mayaDate.kin}") },
-                leadingContent = {
-                    Row {
-                        ImageSign(sign = mayaDate.daysign, size = 40.dp)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        ImageSign(sign = mayaDate.trecena, size = 40.dp)
-                    }
+fun PeopleList(people: List<Person>, onClick: (Int) -> Unit, isWide: Boolean = false) {
+    if (isWide) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(people) { person ->
+                val mayaDate = if (person.sunrise == "before") {
+                    MayaCalendar.maya(person.birthDate.minusDays(1))
+                } else {
+                    MayaCalendar.maya(person.birthDate)
                 }
-            )
-            HorizontalDivider()
+                OutlinedCard(
+                    modifier = Modifier.clickable { onClick(person.id) }
+                ) {
+                    ListItem(
+                        headlineContent = { Text(person.name) },
+                        supportingContent = { Text("${person.birthDate}, ${stringResource(R.string.kin_label)} ${mayaDate.kin}") },
+                        leadingContent = {
+                            Row {
+                                ImageSign(sign = mayaDate.daysign, size = 40.dp)
+                                Spacer(modifier = Modifier.width(4.dp))
+                                ImageSign(sign = mayaDate.trecena, size = 40.dp)
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    } else {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(people) { person ->
+                val mayaDate = if (person.sunrise == "before") {
+                    MayaCalendar.maya(person.birthDate.minusDays(1))
+                } else {
+                    MayaCalendar.maya(person.birthDate)
+                }
+                ListItem(
+                    modifier = Modifier.clickable { onClick(person.id) },
+                    headlineContent = { Text(person.name) },
+                    supportingContent = { Text("${person.birthDate}, ${stringResource(R.string.kin_label)} ${mayaDate.kin}") },
+                    leadingContent = {
+                        Row {
+                            ImageSign(sign = mayaDate.daysign, size = 40.dp)
+                            Spacer(modifier = Modifier.width(4.dp))
+                            ImageSign(sign = mayaDate.trecena, size = 40.dp)
+                        }
+                    }
+                )
+                HorizontalDivider()
+            }
         }
     }
 }
 
 @Composable
-fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> Unit) {
+fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> Unit, isWide: Boolean = false) {
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
     val favoritesIds by viewModel.favoritesIds.collectAsState()
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        if (favoritesIds.isNotEmpty()) {
-            item {
-                val isDefault = defaultGroupId == null
+    if (isWide) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (favoritesIds.isNotEmpty()) {
+                item(span = { GridItemSpan(2) }) {
+                    val isDefault = defaultGroupId == null
+                    OutlinedCard(
+                        modifier = Modifier.clickable { onClick(-1) }
+                    ) {
+                        ListItem(
+                            headlineContent = { 
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(stringResource(R.string.favorites))
+                                    if (isDefault) {
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Icon(
+                                            Icons.Default.Favorite, 
+                                            contentDescription = null, 
+                                            tint = Color.Red,
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                    }
+                                }
+                            },
+                            supportingContent = { Text(stringResource(R.string.people_count, favoritesIds.size)) },
+                            trailingContent = {
+                                IconButton(onClick = {
+                                    if (!isDefault) viewModel.setDefaultGroup(null)
+                                }) {
+                                    Icon(
+                                        imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = stringResource(R.string.set_as_default),
+                                        tint = if (isDefault) Color.Red else LocalContentColor.current
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+            
+            items(groups) { group ->
+                val isDefault = defaultGroupId == group.id
+                OutlinedCard(
+                    modifier = Modifier.clickable { onClick(group.id) }
+                ) {
+                    ListItem(
+                        headlineContent = { 
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(group.name)
+                                if (isDefault) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Icon(
+                                        Icons.Default.Favorite, 
+                                        contentDescription = null, 
+                                        tint = Color.Red,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        },
+                        supportingContent = { Text(stringResource(R.string.people_count, group.memberIds.size)) },
+                        trailingContent = {
+                            IconButton(onClick = {
+                                if (isDefault) viewModel.setDefaultGroup(null)
+                                else viewModel.setDefaultGroup(group.id)
+                            }) {
+                                Icon(
+                                    imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    contentDescription = stringResource(R.string.set_as_default),
+                                    tint = if (isDefault) Color.Red else LocalContentColor.current
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    } else {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            if (favoritesIds.isNotEmpty()) {
+                item {
+                    val isDefault = defaultGroupId == null
+                    ListItem(
+                        modifier = Modifier.clickable { onClick(-1) },
+                        headlineContent = { 
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(stringResource(R.string.favorites))
+                                if (isDefault) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Icon(
+                                        Icons.Default.Favorite, 
+                                        contentDescription = null, 
+                                        tint = Color.Red,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        },
+                        supportingContent = { Text(stringResource(R.string.people_count, favoritesIds.size)) },
+                        trailingContent = {
+                            IconButton(onClick = {
+                                if (!isDefault) viewModel.setDefaultGroup(null)
+                            }) {
+                                Icon(
+                                    imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    contentDescription = stringResource(R.string.set_as_default),
+                                    tint = if (isDefault) Color.Red else LocalContentColor.current
+                                )
+                            }
+                        }
+                    )
+                    HorizontalDivider()
+                }
+            }
+            
+            items(groups) { group ->
+                val isDefault = defaultGroupId == group.id
                 ListItem(
-                    modifier = Modifier.clickable { onClick(-1) },
+                    modifier = Modifier.clickable { onClick(group.id) },
                     headlineContent = { 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.favorites))
+                            Text(group.name)
                             if (isDefault) {
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Icon(
@@ -256,10 +464,11 @@ fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> U
                             }
                         }
                     },
-                    supportingContent = { Text(stringResource(R.string.people_count, favoritesIds.size)) },
+                    supportingContent = { Text(stringResource(R.string.people_count, group.memberIds.size)) },
                     trailingContent = {
                         IconButton(onClick = {
-                            if (!isDefault) viewModel.setDefaultGroup(null)
+                            if (isDefault) viewModel.setDefaultGroup(null)
+                            else viewModel.setDefaultGroup(group.id)
                         }) {
                             Icon(
                                 imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -271,41 +480,6 @@ fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> U
                 )
                 HorizontalDivider()
             }
-        }
-        
-        items(groups) { group ->
-            val isDefault = defaultGroupId == group.id
-            ListItem(
-                modifier = Modifier.clickable { onClick(group.id) },
-                headlineContent = { 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(group.name)
-                        if (isDefault) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                Icons.Default.Favorite, 
-                                contentDescription = null, 
-                                tint = Color.Red,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                },
-                supportingContent = { Text(stringResource(R.string.people_count, group.memberIds.size)) },
-                trailingContent = {
-                    IconButton(onClick = {
-                        if (isDefault) viewModel.setDefaultGroup(null)
-                        else viewModel.setDefaultGroup(group.id)
-                    }) {
-                        Icon(
-                            imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = stringResource(R.string.set_as_default),
-                            tint = if (isDefault) Color.Red else LocalContentColor.current
-                        )
-                    }
-                }
-            )
-            HorizontalDivider()
         }
     }
 }

@@ -20,6 +20,8 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import androidx.glance.layout.*
 import androidx.glance.state.PreferencesGlanceStateDefinition
+import androidx.glance.appwidget.state.updateAppWidgetState
+import androidx.glance.currentState
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -56,7 +58,8 @@ class DaysignWidget : GlanceAppWidget() {
         }.map { it.name }
 
         provideContent {
-            WidgetContent(maya, birthdayPeople)
+            val prefs = currentState<Preferences>()
+            WidgetContent(maya, birthdayPeople, prefs, context)
         }
     }
 

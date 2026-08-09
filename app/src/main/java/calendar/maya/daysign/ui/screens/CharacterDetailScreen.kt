@@ -1,9 +1,5 @@
 package calendar.maya.daysign.ui.screens
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,8 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
@@ -32,19 +26,19 @@ import calendar.maya.daysign.R
 import calendar.maya.daysign.logic.MayaCalendar
 import calendar.maya.daysign.ui.components.ImageSign
 import calendar.maya.daysign.ui.components.MarkdownAsset
-import java.io.InputStreamReader
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
     val context = LocalContext.current
-    val lang = remember { java.util.Locale.getDefault().language }
+    val lang = remember { Locale.getDefault().language }
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesGenitive = stringArrayResource(id = R.array.daysign_names_genitive)
     val daysignNamesAccusative = stringArrayResource(id = R.array.daysign_names_accusative)
     val title = daysignNames.getOrElse(characterId) { "" }
 
-    var expandedSection by remember { mutableStateOf<String?>("Характер") }
+    var expandedSection by remember { mutableStateOf<String?>("character") }
 
     Scaffold(
         topBar = {
@@ -52,68 +46,128 @@ fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
                 title = { Text("$title ($characterId)") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            // Photo
-            val imageRes = context.resources.getIdentifier("photo$characterId", "drawable", context.packageName)
-            if (imageRes != 0) {
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.FillWidth
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Sections
-            ExpandableSection(
-                title = stringResource(R.string.character),
-                expanded = expandedSection == "Характер",
-                onToggle = { expandedSection = if (expandedSection == "Характер") null else "Характер" }
-            ) {
-                MarkdownAsset("md/character/$lang/character_$characterId.md")
-            }
+        BoxWithConstraints(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            val scope = this
+            val isWide = scope.maxWidth > 800.dp
             
-            HorizontalDivider()
+            if (isWide) {
+                Row(modifier = Modifier.fillMaxSize()) {
+                    // Left Side: Character Description
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Text(
+                            text = stringResource(R.string.character),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        MarkdownAsset("md/character/$lang/character_$characterId.md")
+                    }
+                    
+                    VerticalDivider()
 
-            ExpandableSection(
-                title = stringResource(R.string.symbol_meaning),
-                expanded = expandedSection == "Значение символа",
-                onToggle = { expandedSection = if (expandedSection == "Значение символа") null else "Значение символа" }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    ImageSign(sign = characterId, size = 200.dp)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    MarkdownAsset("md/character/$lang/symbol_$characterId.md")
+                    // Right Side: Symbol and Connections
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp)
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.symbol_meaning),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ImageSign(sign = characterId, size = 180.dp)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        MarkdownAsset("md/character/$lang/symbol_$characterId.md")
+                        
+                        Spacer(modifier = Modifier.height(24.dp))
+                        
+                        Text(
+                            text = stringResource(R.string.connections_people),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ConnectionsList(
+                            characterId = characterId,
+                            names = daysignNames,
+                            namesGenitive = daysignNamesGenitive,
+                            namesAccusative = daysignNamesAccusative,
+                            lang = lang
+                        )
+                    }
                 }
-            }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    // Photo
+                    val imageRes = context.resources.getIdentifier("photo$characterId", "drawable", context.packageName)
+                    if (imageRes != 0) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            contentScale = ContentScale.FillWidth
+                        )
+                    }
 
-            HorizontalDivider()
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            ExpandableSection(
-                title = stringResource(R.string.connections_people),
-                expanded = expandedSection == "Связи с другими знаками",
-                onToggle = { expandedSection = if (expandedSection == "Связи с другими знаками") null else "Связи с другими знаками" }
-            ) {
-                ConnectionsList(
-                    characterId = characterId,
-                    names = daysignNames,
-                    namesGenitive = daysignNamesGenitive,
-                    namesAccusative = daysignNamesAccusative,
-                    lang = lang
-                )
+                    ExpandableSection(
+                        title = stringResource(R.string.character),
+                        expanded = expandedSection == "character",
+                        onToggle = { expandedSection = if (expandedSection == "character") null else "character" }
+                    ) {
+                        MarkdownAsset("md/character/$lang/character_$characterId.md")
+                    }
+                    
+                    HorizontalDivider()
+
+                    ExpandableSection(
+                        title = stringResource(R.string.symbol_meaning),
+                        expanded = expandedSection == "symbol",
+                        onToggle = { expandedSection = if (expandedSection == "symbol") null else "symbol" }
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            ImageSign(sign = characterId, size = 200.dp)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            MarkdownAsset("md/character/$lang/symbol_$characterId.md")
+                        }
+                    }
+
+                    HorizontalDivider()
+
+                    ExpandableSection(
+                        title = stringResource(R.string.connections_people),
+                        expanded = expandedSection == "connections",
+                        onToggle = { expandedSection = if (expandedSection == "connections") null else "connections" }
+                    ) {
+                        ConnectionsList(
+                            characterId = characterId,
+                            names = daysignNames,
+                            namesGenitive = daysignNamesGenitive,
+                            namesAccusative = daysignNamesAccusative,
+                            lang = lang
+                        )
+                    }
+                }
             }
         }
     }
@@ -135,13 +189,13 @@ fun ExpandableSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Icon(
                 imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                 contentDescription = null
             )
         }
-        AnimatedVisibility(visible = expanded) {
+        if (expanded) {
             Box(modifier = Modifier.padding(16.dp)) {
                 content()
             }

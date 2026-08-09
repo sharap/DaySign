@@ -3,11 +3,15 @@ package calendar.maya.daysign.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +43,6 @@ fun CharactersScreen(viewModel: MainViewModel, resetTrigger: Int = 0, targetChar
     LaunchedEffect(targetCharacterId) {
         targetCharacterId?.let { id ->
             navController.navigate("detail/$id") {
-                // Avoid multiple instances on stack if needed
                 launchSingleTop = true
             }
         }
@@ -90,55 +93,52 @@ fun CharactersList(onCharacterClick: (Int) -> Unit, onAboutClick: () -> Unit) {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.characters_title)) },
                 actions = {
-                    IconButton(onClick = onAboutClick) {
-                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.about_app))
+                    val isWide = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
+                    if (!isWide) {
+                        IconButton(onClick = onAboutClick) {
+                            Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.about_app))
+                        }
                     }
                 }
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            CharacterGroup(stringResource(R.string.group_power), listOf(1, 6, 11, 16), daysignNames, onCharacterClick)
-            CharacterGroup(stringResource(R.string.group_desire), listOf(2, 7, 12, 17), daysignNames, onCharacterClick)
-            CharacterGroup(stringResource(R.string.group_goal), listOf(3, 8, 13, 18), daysignNames, onCharacterClick)
-            CharacterGroup(stringResource(R.string.group_resource), listOf(4, 9, 14, 19), daysignNames, onCharacterClick)
-            CharacterGroup(stringResource(R.string.group_decision), listOf(5, 10, 15, 20), daysignNames, onCharacterClick)
-        }
-    }
-}
+        BoxWithConstraints(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            val scope = this
+            val isCompact = scope.maxWidth < 600.dp
+            val groups = listOf(
+                stringResource(R.string.group_power) to listOf(1, 6, 11, 16),
+                stringResource(R.string.group_desire) to listOf(2, 7, 12, 17),
+                stringResource(R.string.group_goal) to listOf(3, 8, 13, 18),
+                stringResource(R.string.group_resource) to listOf(4, 9, 14, 19),
+                stringResource(R.string.group_decision) to listOf(5, 10, 15, 20)
+            )
 
-@Composable
-fun CharacterGroup(
-    title: String,
-    ids: List<Int>,
-    names: Array<String>,
-    onCharacterClick: (Int) -> Unit
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = title,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ids.forEach { id ->
-                CharacterCard(
-                    id = id,
-                    name = names.getOrElse(id) { "" },
-                    modifier = Modifier.weight(1f),
-                    onClick = { onCharacterClick(id) }
-                )
+            LazyVerticalGrid(
+                columns = if (isCompact) GridCells.Fixed(4) else GridCells.Adaptive(minSize = 140.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                groups.forEach { (title, ids) ->
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Text(
+                            text = title,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    items(ids) { id ->
+                        CharacterCard(
+                            id = id,
+                            name = daysignNames.getOrElse(id) { "" },
+                            onClick = { onCharacterClick(id) }
+                        )
+                    }
+                }
             }
         }
     }
@@ -148,7 +148,7 @@ fun CharacterGroup(
 fun CharacterCard(id: Int, name: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Card(
         modifier = modifier
-            .aspectRatio(0.7f)
+            .aspectRatio(0.75f)
             .clickable { onClick() }
     ) {
         Column(
@@ -158,13 +158,14 @@ fun CharacterCard(id: Int, name: String, modifier: Modifier = Modifier, onClick:
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            ImageSign(sign = id, size = 60.dp)
+            ImageSign(sign = id, size = 56.dp)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = name,
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 textAlign = TextAlign.Center,
-                lineHeight = 14.sp
+                lineHeight = 13.sp,
+                maxLines = 2
             )
         }
     }

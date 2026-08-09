@@ -2,9 +2,10 @@ package calendar.maya.daysign.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -51,7 +52,7 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
     val anchorDate = remember { LocalDate.of(2000, 1, 1) }
     val baseIndex = 100000 // Very large number to allow long scroll back
     
-    val listState = rememberLazyListState()
+    val listState = rememberLazyGridState()
 
     // Calculate target index for current date
     val targetIndex = (baseIndex + ChronoUnit.DAYS.between(anchorDate, currentDate)).toInt()
@@ -68,7 +69,8 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 300.dp),
             state = listState,
             modifier = Modifier
                 .padding(innerPadding)

@@ -7,17 +7,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.Color
 import calendar.maya.daysign.ui.components.getSignColor
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,23 +55,15 @@ fun GroupDetailScreen(
     }
     
     val isDefault = if (isFavorites) defaultGroupId == null else defaultGroupId == groupId
-    
+    val members = allPeople.filter { it.id in (group?.memberIds ?: emptyList()) }
+
     var showAddPersonDialog by remember { mutableStateOf(false) }
     var showEditGroupDialog by remember { mutableStateOf(false) }
-
-    if (group == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.group_not_found))
-        }
-        return
-    }
-
-    val members = allPeople.filter { it.id in group.memberIds }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(group.name) },
+                title = { Text(group?.name ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -102,7 +89,7 @@ fun GroupDetailScreen(
                             Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
                         }
                         IconButton(onClick = { 
-                            viewModel.deleteGroup(group!!)
+                            group?.let { viewModel.deleteGroup(it) }
                             onBack()
                         }) {
                             Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
@@ -112,100 +99,99 @@ fun GroupDetailScreen(
             )
         }
     ) { innerPadding ->
-        var expandedSection by remember { mutableStateOf<String?>("people") }
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 16.dp)
-        ) {
-            if (group.description.isNotEmpty()) {
-                Text(
-                    group.description, 
-                    fontSize = 16.sp, 
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            
-            AccordionItem(
-                title = stringResource(R.string.people),
-                isExpanded = expandedSection == "people",
-                onToggle = { expandedSection = if (expandedSection == "people") null else "people" }
-            ) {
-                Column {
-                    if (!isFavorites) {
-                        ListItem(
-                            modifier = Modifier.clickable { showAddPersonDialog = true },
-                            headlineContent = { Text(stringResource(R.string.add_person), color = MaterialTheme.colorScheme.primary) },
-                            leadingContent = { Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
-                        )
-                        HorizontalDivider()
-                    }
+        BoxWithConstraints(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            val scope = this
+            val isWide = scope.maxWidth > 800.dp
+            var expandedSection by remember { mutableStateOf<String?>("people") }
+            var includeFantoms by remember { mutableStateOf(false) }
 
-                    members.forEach { person ->
-                        var personExpanded by remember { mutableStateOf(false) }
-                        val personMaya = if (person.sunrise == "before") {
-                            MayaCalendar.maya(person.birthDate.minusDays(1))
-                        } else {
-                            MayaCalendar.maya(person.birthDate)
-                        }
-
-                        ListItem(
-                            modifier = Modifier.clickable { personExpanded = !personExpanded },
-                            headlineContent = { Text(person.name) },
-                            leadingContent = {
-                                Row {
-                                    ImageSign(sign = personMaya.daysign, size = 32.dp)
-                                    ImageSign(sign = personMaya.trecena, size = 32.dp)
-                                }
-                            },
-                            trailingContent = {
-                                IconButton(onClick = {
-                                    if (isFavorites) {
-                                        viewModel.toggleFavorite(person.id)
-                                    } else {
-                                        val updatedIds = group!!.memberIds.filter { it != person.id }
-                                        viewModel.addGroup(group.copy(memberIds = updatedIds))
-                                    }
-                                }) {
-                                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove))
+            if (isWide) {
+                Row(modifier = Modifier.fillMaxSize()) {
+                    // Left Column: Members
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = stringResource(R.string.people), modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            if (!isFavorites) {
+                                item {
+                                    ListItem(
+                                        modifier = Modifier.clickable { showAddPersonDialog = true },
+                                        headlineContent = { Text(stringResource(R.string.add_person), color = MaterialTheme.colorScheme.primary) },
+                                        leadingContent = { Icon(Icons.Default.Add, null, tint = MaterialTheme.colorScheme.primary) }
+                                    )
+                                    HorizontalDivider()
                                 }
                             }
-                        )
-                        if (personExpanded) {
-                            InfluenceList(
-                                targetKinDaysign = personMaya.daysign,
-                                targetKinTrecena = personMaya.trecena,
-                                people = members.filter { it.id != person.id },
-                                onPersonClick = { onNavigateToPerson(it.id) },
-                                modifier = Modifier.padding(start = 16.dp)
-                            )
+                            items(members) { person ->
+                                var personExpanded by remember { mutableStateOf(false) }
+                                val personMaya = if (person.sunrise == "before") MayaCalendar.maya(person.birthDate.minusDays(1)) else MayaCalendar.maya(person.birthDate)
+                                ListItem(
+                                    modifier = Modifier.clickable { personExpanded = !personExpanded },
+                                    headlineContent = { Text(person.name) },
+                                    leadingContent = { Row { ImageSign(sign = personMaya.daysign, size = 32.dp); ImageSign(sign = personMaya.trecena, size = 32.dp) } },
+                                    trailingContent = {
+                                        IconButton(onClick = { if (isFavorites) viewModel.toggleFavorite(person.id) else { val updatedIds = group!!.memberIds.filter { it != person.id }; viewModel.addGroup(group.copy(memberIds = updatedIds)) } }) {
+                                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove))
+                                        }
+                                    }
+                                )
+                                if (personExpanded) {
+                                    InfluenceList(targetKinDaysign = personMaya.daysign, targetKinTrecena = personMaya.trecena, people = members.filter { it.id != person.id }, onPersonClick = { onNavigateToPerson(it.id) }, modifier = Modifier.padding(start = 16.dp))
+                                }
+                                HorizontalDivider()
+                            }
                         }
-                        HorizontalDivider()
+                    }
+                    VerticalDivider()
+                    // Right Column: Result
+                    Column(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxHeight()
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp)
+                    ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = stringResource(R.string.result_group), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { includeFantoms = !includeFantoms }) {
+                                Checkbox(checked = includeFantoms, onCheckedChange = { includeFantoms = it })
+                                Text(stringResource(R.string.phantoms), fontSize = 12.sp)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ResultGroupSection(members, includeFantoms)
                     }
                 }
-            }
-            
-            var includeFantoms by remember { mutableStateOf(false) }
-            AccordionItem(
-                title = stringResource(R.string.result_group),
-                isExpanded = expandedSection == "result",
-                onToggle = { expandedSection = if (expandedSection == "result") null else "result" }
-            ) {
-                Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { includeFantoms = !includeFantoms }) {
-                            Checkbox(checked = includeFantoms, onCheckedChange = { includeFantoms = it })
-                            Text(stringResource(R.string.phantoms), fontSize = 12.sp)
+            } else {
+                Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
+                    if (group?.description?.isNotEmpty() == true) {
+                        Text(group.description, fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(16.dp))
+                    }
+                    AccordionItem(title = stringResource(R.string.people), isExpanded = expandedSection == "people", onToggle = { expandedSection = if (expandedSection == "people") null else "people" }) {
+                        Column {
+                            if (!isFavorites) {
+                                ListItem(modifier = Modifier.clickable { showAddPersonDialog = true }, headlineContent = { Text(stringResource(R.string.add_person), color = MaterialTheme.colorScheme.primary) }, leadingContent = { Icon(Icons.Default.Add, null, tint = MaterialTheme.colorScheme.primary) })
+                                HorizontalDivider()
+                            }
+                            members.forEach { person ->
+                                var personExpanded by remember { mutableStateOf(false) }
+                                val personMaya = if (person.sunrise == "before") MayaCalendar.maya(person.birthDate.minusDays(1)) else MayaCalendar.maya(person.birthDate)
+                                ListItem(modifier = Modifier.clickable { personExpanded = !personExpanded }, headlineContent = { Text(person.name) }, leadingContent = { Row { ImageSign(sign = personMaya.daysign, size = 32.dp); ImageSign(sign = personMaya.trecena, size = 32.dp) } }, trailingContent = { IconButton(onClick = { if (isFavorites) viewModel.toggleFavorite(person.id) else { val updatedIds = group!!.memberIds.filter { it != person.id }; viewModel.addGroup(group.copy(memberIds = updatedIds)) } }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove)) } })
+                                if (personExpanded) { InfluenceList(targetKinDaysign = personMaya.daysign, targetKinTrecena = personMaya.trecena, people = members.filter { it.id != person.id }, onPersonClick = { onNavigateToPerson(it.id) }, modifier = Modifier.padding(start = 16.dp)) }
+                                HorizontalDivider()
+                            }
                         }
                     }
-                    ResultGroupSection(members, includeFantoms)
+                    AccordionItem(title = stringResource(R.string.result_group), isExpanded = expandedSection == "result", onToggle = { expandedSection = if (expandedSection == "result") null else "result" }) {
+                        Column {
+                            Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { includeFantoms = !includeFantoms }) {
+                                    Checkbox(checked = includeFantoms, onCheckedChange = { includeFantoms = it })
+                                    Text(stringResource(R.string.phantoms), fontSize = 12.sp)
+                                }
+                            }
+                            ResultGroupSection(members, includeFantoms)
+                        }
+                    }
                 }
             }
         }
