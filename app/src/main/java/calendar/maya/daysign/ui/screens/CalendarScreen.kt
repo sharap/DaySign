@@ -29,7 +29,7 @@ import java.util.*
 @Composable
 fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
     val currentDate by viewModel.currentDate.collectAsState()
-    val allPeople by viewModel.allPeople.collectAsState()
+    val peopleByKin by viewModel.peopleByKin.collectAsState()
     val locale = Locale.getDefault()
     
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
@@ -84,15 +84,8 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
                 val maya = MayaCalendar.maya(date)
                 val isSelected = date == currentDate
                 
-                // Find people with this kin
-                val birthdays = allPeople.filter { person ->
-                    val personMaya = if (person.sunrise == "before") {
-                        MayaCalendar.maya(person.birthDate.minusDays(1))
-                    } else {
-                        MayaCalendar.maya(person.birthDate)
-                    }
-                    personMaya.kin == maya.kin
-                }
+                // Find people with this kin - OPTIMIZED: use pre-calculated map
+                val birthdays = peopleByKin[maya.kin] ?: emptyList()
 
                 Column {
                     ListItem(

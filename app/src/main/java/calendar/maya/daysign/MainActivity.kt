@@ -33,7 +33,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: MainViewModel = viewModel()
-            val pagerState = rememberPagerState(initialPage = 1) { 6 }
+            val adaptiveInfo = currentWindowAdaptiveInfo()
+            val isWide = adaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
+            val pageCountState = rememberUpdatedState(if (isWide) 6 else 4)
+            val pagerState = rememberPagerState(initialPage = 1) { pageCountState.value }
             val coroutineScope = rememberCoroutineScope()
             
             var charactersResetTrigger by remember { mutableIntStateOf(0) }
@@ -54,13 +57,11 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(viewModel.navigateToPage) {
                 viewModel.navigateToPage.collect { pageIndex ->
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(pageIndex)
+                        val targetPage = if (!isWide && pageIndex > 3) 3 else pageIndex
+                        pagerState.animateScrollToPage(targetPage)
                     }
                 }
             }
-
-            val adaptiveInfo = currentWindowAdaptiveInfo()
-            val isWide = adaptiveInfo.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
 
             val navItems = listOf(
                 NavItem(stringResource(R.string.calendar_title), Icons.Default.CalendarMonth),

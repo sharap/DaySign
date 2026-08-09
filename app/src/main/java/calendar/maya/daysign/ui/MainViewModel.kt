@@ -19,6 +19,7 @@ import calendar.maya.daysign.ui.widget.DaysignWidget
 import androidx.glance.appwidget.updateAll
 import androidx.core.content.edit
 import java.time.LocalDate
+import kotlinx.coroutines.Dispatchers
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -40,9 +41,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _searchQuery.value = query
     }
 
-    val allPeople: StateFlow<List<Person>> = dao.getAllPeople().map { entities ->
-        entities.map { it.toDomain() }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val allPeople: StateFlow<List<Person>> = dao.getAllPeople()
+        .map { entities ->
+            entities.map { entity ->
+                val person = entity.toDomain()
+                val dateForMaya = if (person.sunrise == "before") person.birthDate.minusDays(1) else person.birthDate
+                person.copy(mayaDate = MayaCalendar.maya(dateForMaya))
+            }
+        }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val peopleByKin: StateFlow<Map<Int, List<Person>>> = allPeople
+        .map { list ->
+            list.groupBy { it.mayaDate?.kin ?: 0 }
+        }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
 
     val people: StateFlow<List<Person>> = combine(allPeople, _searchQuery) { list, query ->
         if (query.isEmpty()) list

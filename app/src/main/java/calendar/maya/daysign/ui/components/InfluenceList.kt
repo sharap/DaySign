@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import calendar.maya.daysign.R
 import calendar.maya.daysign.logic.MayaCalendar
 import calendar.maya.daysign.model.Person
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InfluenceList(
@@ -26,22 +28,23 @@ fun InfluenceList(
     LaunchedEffect(people, targetKinDaysign, targetKinTrecena) {
         isLoading = true
         // Process in background to avoid UI lag
-        val results = people.map { person ->
-            val personMaya = if (person.sunrise == "before") {
-                MayaCalendar.maya(person.birthDate.minusDays(1))
-            } else {
-                MayaCalendar.maya(person.birthDate)
-            }
-            val connections = MayaCalendar.getKinConnections(
-                targetKinDaysign, targetKinTrecena,
-                personMaya.daysign, personMaya.trecena
+        val results = withContext(Dispatchers.Default) {
+            people.mapNotNull { person ->
+                val personMaya = person.mayaDate ?: return@mapNotNull null
+                val connections = MayaCalendar.getKinConnections(
+                    targetKinDaysign, targetKinTrecena,
+                    personMaya.daysign, personMaya.trecena
+                )
+                if (connections.any { conn -> conn > 0 }) {
+                    person to connections
+                } else {
+                    null
+                }
+            }.sortedWith(
+                compareByDescending<Pair<Person, List<Int>>> { it.second.count { conn -> conn > 0 } }
+                    .thenBy { it.first.name }
             )
-            person to connections
-        }.filter { it.second.any { conn -> conn > 0 } }
-         .sortedWith(
-             compareByDescending<Pair<Person, List<Int>>> { it.second.count { conn -> conn > 0 } }
-             .thenBy { it.first.name }
-         )
+        }
         
         processedPeople = results
         isLoading = false
@@ -56,11 +59,7 @@ fun InfluenceList(
     } else {
         Column(modifier = modifier) {
             processedPeople.forEach { (person, connections) ->
-                val personMaya = if (person.sunrise == "before") {
-                    MayaCalendar.maya(person.birthDate.minusDays(1))
-                } else {
-                    MayaCalendar.maya(person.birthDate)
-                }
+                val personMaya = person.mayaDate!!
 
                 ListItem(
                     modifier = Modifier.clickable { onPersonClick(person) },

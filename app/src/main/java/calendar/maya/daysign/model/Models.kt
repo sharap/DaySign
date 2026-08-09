@@ -25,7 +25,8 @@ data class Person(
     val name: String,
     val birthDate: LocalDate,
     val gender: String, // "male" or "female"
-    val sunrise: String // "before" or "after"
+    val sunrise: String, // "before" or "after"
+    val mayaDate: MayaDate? = null
 )
 
 data class Group(

@@ -36,6 +36,7 @@ fun HomeScreen(viewModel: MainViewModel) {
     val mayaDate by viewModel.currentMayaDate.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
     val allPeople by viewModel.allPeople.collectAsState()
+    val peopleByKin by viewModel.peopleByKin.collectAsState()
     val allGroups by viewModel.groups.collectAsState()
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
     val effectiveMembers by viewModel.effectiveDefaultGroupMembers.collectAsState()
@@ -125,6 +126,10 @@ fun HomeScreen(viewModel: MainViewModel) {
             val scope = this
             val isWide = scope.maxWidth > 600.dp
             
+            val equalPeople = remember(mayaDate.kin, peopleByKin) {
+                peopleByKin[mayaDate.kin] ?: emptyList()
+            }
+
             if (isWide) {
                 Row(modifier = Modifier.fillMaxSize()) {
                     Column(
@@ -146,7 +151,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                     }
                     VerticalDivider()
                     LazyColumn(modifier = Modifier.weight(1.5f), horizontalAlignment = Alignment.CenterHorizontally) {
-                        homeContentItems(mayaDate, expandedSection, { expandedSection = it }, allPeople, allGroups, defaultGroupId, effectiveMembers, viewModel, lang)
+                        homeContentItems(mayaDate, expandedSection, { expandedSection = it }, allPeople, equalPeople, allGroups, defaultGroupId, effectiveMembers, viewModel, lang)
                     }
                 }
             } else {
@@ -169,7 +174,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                         Text(text = currentDate.format(dateFormatter), modifier = Modifier.clickable { showDatePicker = true }, color = MaterialTheme.colorScheme.primary, fontSize = 18.sp)
                         Spacer(modifier = Modifier.height(24.dp))
                     }
-                    homeContentItems(mayaDate, expandedSection, { expandedSection = it }, allPeople, allGroups, defaultGroupId, effectiveMembers, viewModel, lang)
+                    homeContentItems(mayaDate, expandedSection, { expandedSection = it }, allPeople, equalPeople, allGroups, defaultGroupId, effectiveMembers, viewModel, lang)
                 }
             }
         }
@@ -182,6 +187,7 @@ private fun LazyListScope.homeContentItems(
     expandedSection: String?,
     onToggle: (String?) -> Unit,
     allPeople: List<calendar.maya.daysign.model.Person>,
+    equalPeople: List<calendar.maya.daysign.model.Person>,
     allGroups: List<calendar.maya.daysign.model.Group>,
     defaultGroupId: Int?,
     effectiveMembers: List<Int>?,
@@ -215,15 +221,6 @@ private fun LazyListScope.homeContentItems(
                 KinDescription(kin = mayaDate.kin, lang = lang)
             }
         }
-    }
-
-    val equalPeople = allPeople.filter { person ->
-        val personMaya = if (person.sunrise == "before") {
-            MayaCalendar.maya(person.birthDate.minusDays(1))
-        } else {
-            MayaCalendar.maya(person.birthDate)
-        }
-        personMaya.kin == mayaDate.kin
     }
 
     item {

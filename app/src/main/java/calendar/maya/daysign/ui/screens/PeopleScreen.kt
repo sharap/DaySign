@@ -272,11 +272,7 @@ fun PeopleList(people: List<Person>, onClick: (Int) -> Unit, isWide: Boolean = f
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(people) { person ->
-                val mayaDate = if (person.sunrise == "before") {
-                    MayaCalendar.maya(person.birthDate.minusDays(1))
-                } else {
-                    MayaCalendar.maya(person.birthDate)
-                }
+                val mayaDate = person.mayaDate ?: return@items
                 OutlinedCard(
                     modifier = Modifier.clickable { onClick(person.id) }
                 ) {
@@ -297,11 +293,7 @@ fun PeopleList(people: List<Person>, onClick: (Int) -> Unit, isWide: Boolean = f
     } else {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(people) { person ->
-                val mayaDate = if (person.sunrise == "before") {
-                    MayaCalendar.maya(person.birthDate.minusDays(1))
-                } else {
-                    MayaCalendar.maya(person.birthDate)
-                }
+                val mayaDate = person.mayaDate ?: return@items
                 ListItem(
                     modifier = Modifier.clickable { onClick(person.id) },
                     headlineContent = { Text(person.name) },
