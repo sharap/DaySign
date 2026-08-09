@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,16 +31,20 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(viewModel: MainViewModel) {
+    val context = LocalContext.current
+    val lang = remember { Locale.getDefault().language }
+    
     val mayaDate by viewModel.currentMayaDate.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
     val allPeople by viewModel.allPeople.collectAsState()
     val allGroups by viewModel.groups.collectAsState()
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
+    val effectiveMembers by viewModel.effectiveDefaultGroupMembers.collectAsState()
     
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesTo = stringArrayResource(id = R.array.daysign_names_to)
     
-    val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale("ru"))
+    val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.getDefault())
     
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -57,12 +62,12 @@ fun HomeScreen(viewModel: MainViewModel) {
                     }
                     showDatePicker = false
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Отмена")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         ) {
@@ -93,12 +98,12 @@ fun HomeScreen(viewModel: MainViewModel) {
                     onClick = { viewModel.backDay() },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                 }
 
                 ExtendedFloatingActionButton(
                     onClick = { viewModel.setCurrentDate(LocalDate.now()) },
-                    text = { Text("Сегодня") },
+                    text = { Text(stringResource(R.string.today)) },
                     icon = { },
                     containerColor = if (currentDate == LocalDate.now()) 
                         MaterialTheme.colorScheme.primary 
@@ -110,7 +115,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                     onClick = { viewModel.nextDay() },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Вперед")
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.forward))
                 }
             }
         },
@@ -199,7 +204,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                     onToggle = { expandedSection = if (expandedSection == "kin") null else "kin" }
                 ) {
                     Box(modifier = Modifier.padding(16.dp)) {
-                        KinDescription(kin = mayaDate.kin, lang = "ru")
+                        KinDescription(kin = mayaDate.kin, lang = lang)
                     }
                 }
             }
@@ -235,12 +240,18 @@ fun HomeScreen(viewModel: MainViewModel) {
             val defaultGroup = allGroups.find { it.id == defaultGroupId }
             item {
                 AccordionItem(
-                    title = defaultGroup?.let { "${stringResource(R.string.group_label)} ${it.name}" } ?: stringResource(R.string.influence_people),
+                    title = if (defaultGroup != null) {
+                        "${stringResource(R.string.group_label)} ${defaultGroup.name}"
+                    } else if (!effectiveMembers.isNullOrEmpty()) {
+                        stringResource(R.string.favorites)
+                    } else {
+                        stringResource(R.string.influence_people)
+                    },
                     isExpanded = expandedSection == "influence",
                     onToggle = { expandedSection = if (expandedSection == "influence") null else "influence" }
                 ) {
-                    val filteredPeople = if (defaultGroup != null) {
-                        allPeople.filter { it.id in defaultGroup.memberIds }
+                    val filteredPeople = if (effectiveMembers != null) {
+                        allPeople.filter { it.id in effectiveMembers!! }
                     } else {
                         allPeople
                     }

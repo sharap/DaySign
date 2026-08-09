@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -87,10 +88,10 @@ fun CharactersList(onCharacterClick: (Int) -> Unit, onAboutClick: () -> Unit) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Характеры") },
+                title = { Text(stringResource(R.string.characters_title)) },
                 actions = {
                     IconButton(onClick = onAboutClick) {
-                        Icon(Icons.Outlined.Info, contentDescription = "О приложении")
+                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.about_app))
                     }
                 }
             )
@@ -104,11 +105,11 @@ fun CharactersList(onCharacterClick: (Int) -> Unit, onAboutClick: () -> Unit) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            CharacterGroup("Сила", listOf(1, 6, 11, 16), daysignNames, onCharacterClick)
-            CharacterGroup("Желание", listOf(2, 7, 12, 17), daysignNames, onCharacterClick)
-            CharacterGroup("Цель", listOf(3, 8, 13, 18), daysignNames, onCharacterClick)
-            CharacterGroup("Ресурс", listOf(4, 9, 14, 19), daysignNames, onCharacterClick)
-            CharacterGroup("Решение", listOf(5, 10, 15, 20), daysignNames, onCharacterClick)
+            CharacterGroup(stringResource(R.string.group_power), listOf(1, 6, 11, 16), daysignNames, onCharacterClick)
+            CharacterGroup(stringResource(R.string.group_desire), listOf(2, 7, 12, 17), daysignNames, onCharacterClick)
+            CharacterGroup(stringResource(R.string.group_goal), listOf(3, 8, 13, 18), daysignNames, onCharacterClick)
+            CharacterGroup(stringResource(R.string.group_resource), listOf(4, 9, 14, 19), daysignNames, onCharacterClick)
+            CharacterGroup(stringResource(R.string.group_decision), listOf(5, 10, 15, 20), daysignNames, onCharacterClick)
         }
     }
 }

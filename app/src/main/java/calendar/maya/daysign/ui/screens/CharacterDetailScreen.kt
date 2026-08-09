@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +38,7 @@ import java.io.InputStreamReader
 @Composable
 fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
     val context = LocalContext.current
+    val lang = remember { java.util.Locale.getDefault().language }
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesGenitive = stringArrayResource(id = R.array.daysign_names_genitive)
     val daysignNamesAccusative = stringArrayResource(id = R.array.daysign_names_accusative)
@@ -77,31 +79,31 @@ fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
 
             // Sections
             ExpandableSection(
-                title = "Характер",
+                title = stringResource(R.string.character),
                 expanded = expandedSection == "Характер",
                 onToggle = { expandedSection = if (expandedSection == "Характер") null else "Характер" }
             ) {
-                MarkdownAsset("md/character/ru/character_$characterId.md")
+                MarkdownAsset("md/character/$lang/character_$characterId.md")
             }
             
             HorizontalDivider()
 
             ExpandableSection(
-                title = "Значение символа",
+                title = stringResource(R.string.symbol_meaning),
                 expanded = expandedSection == "Значение символа",
                 onToggle = { expandedSection = if (expandedSection == "Значение символа") null else "Значение символа" }
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     ImageSign(sign = characterId, size = 200.dp)
                     Spacer(modifier = Modifier.height(16.dp))
-                    MarkdownAsset("md/character/ru/symbol_$characterId.md")
+                    MarkdownAsset("md/character/$lang/symbol_$characterId.md")
                 }
             }
 
             HorizontalDivider()
 
             ExpandableSection(
-                title = "Связи с другими знаками",
+                title = stringResource(R.string.connections_people),
                 expanded = expandedSection == "Связи с другими знаками",
                 onToggle = { expandedSection = if (expandedSection == "Связи с другими знаками") null else "Связи с другими знаками" }
             ) {
@@ -109,7 +111,8 @@ fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
                     characterId = characterId,
                     names = daysignNames,
                     namesGenitive = daysignNamesGenitive,
-                    namesAccusative = daysignNamesAccusative
+                    namesAccusative = daysignNamesAccusative,
+                    lang = lang
                 )
             }
         }
@@ -151,7 +154,8 @@ fun ConnectionsList(
     characterId: Int,
     names: Array<String>,
     namesGenitive: Array<String>,
-    namesAccusative: Array<String>
+    namesAccusative: Array<String>,
+    lang: String
 ) {
     val connections = MayaCalendar.getConnections(characterId)
     if (connections.isEmpty()) return
@@ -165,15 +169,29 @@ fun ConnectionsList(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         connections.forEachIndexed { index, connId ->
             val type = connectionTypes.getOrElse(index) { "" }
-            val connTitle = when (index) {
-                0 -> "${names.getOrElse(characterId) { "" }} поддерживает ${namesAccusative.getOrElse(connId) { "" }}"
-                1 -> "${names.getOrElse(connId) { "" }} поддерживает ${namesAccusative.getOrElse(characterId) { "" }}"
-                2 -> "${names.getOrElse(characterId) { "" }} контролирует ${namesAccusative.getOrElse(connId) { "" }}"
-                3 -> "${names.getOrElse(connId) { "" }} контролирует ${namesAccusative.getOrElse(characterId) { "" }}"
-                4 -> "страсть/испытание ${namesGenitive.getOrElse(connId) { "" }}"
-                5 -> "партнёр/друг ${namesGenitive.getOrElse(connId) { "" }}"
-                6 -> "тайная сила ${namesGenitive.getOrElse(connId) { "" }}"
-                else -> ""
+            
+            val connTitle = if (lang == "ru") {
+                when (index) {
+                    0 -> "${names.getOrElse(characterId) { "" }} поддерживает ${namesAccusative.getOrElse(connId) { "" }}"
+                    1 -> "${names.getOrElse(connId) { "" }} поддерживает ${namesAccusative.getOrElse(characterId) { "" }}"
+                    2 -> "${names.getOrElse(characterId) { "" }} контролирует ${namesAccusative.getOrElse(connId) { "" }}"
+                    3 -> "${names.getOrElse(connId) { "" }} контролирует ${namesAccusative.getOrElse(characterId) { "" }}"
+                    4 -> "страсть/испытание ${namesGenitive.getOrElse(connId) { "" }}"
+                    5 -> "партнёр/друг ${namesGenitive.getOrElse(connId) { "" }}"
+                    6 -> "тайная сила ${namesGenitive.getOrElse(connId) { "" }}"
+                    else -> ""
+                }
+            } else {
+                when (index) {
+                    0 -> "${names.getOrElse(characterId) { "" }} supports ${names.getOrElse(connId) { "" }}"
+                    1 -> "${names.getOrElse(connId) { "" }} supports ${names.getOrElse(characterId) { "" }}"
+                    2 -> "${names.getOrElse(characterId) { "" }} controls ${names.getOrElse(connId) { "" }}"
+                    3 -> "${names.getOrElse(connId) { "" }} controls ${names.getOrElse(characterId) { "" }}"
+                    4 -> "passion/challenge of ${names.getOrElse(connId) { "" }}"
+                    5 -> "partner/friend ${names.getOrElse(connId) { "" }}"
+                    6 -> "secret power of ${names.getOrElse(connId) { "" }}"
+                    else -> ""
+                }
             }
 
             ExpandableConnectionItem(
@@ -182,6 +200,7 @@ fun ConnectionsList(
                 characterId = characterId,
                 connId = connId,
                 type = type,
+                lang = lang,
                 expanded = expandedIndex == index,
                 onToggle = { expandedIndex = if (expandedIndex == index) -1 else index }
             )
@@ -196,6 +215,7 @@ fun ExpandableConnectionItem(
     characterId: Int,
     connId: Int,
     type: String,
+    lang: String,
     expanded: Boolean,
     onToggle: () -> Unit
 ) {
@@ -220,7 +240,7 @@ fun ExpandableConnectionItem(
             }
             AnimatedVisibility(visible = expanded) {
                 Box(modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp)) {
-                    MarkdownAsset("md/connection/ru/sign_${characterId}_${type}_${connId}.md")
+                    MarkdownAsset("md/connection/$lang/sign_${characterId}_${type}_${connId}.md")
                 }
             }
         }

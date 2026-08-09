@@ -17,9 +17,13 @@ import com.mikepenz.markdown.m3.Markdown
 import kotlinx.coroutines.delay
 import java.io.InputStreamReader
 
+import androidx.compose.ui.res.stringResource
+import calendar.maya.daysign.R
+
 @Composable
 fun MarkdownAsset(path: String) {
     val context = LocalContext.current
+    val notFoundText = stringResource(R.string.description_not_found)
     var text by remember { mutableStateOf("") }
     LaunchedEffect(path) {
         try {
@@ -29,7 +33,7 @@ fun MarkdownAsset(path: String) {
                 }
             }
         } catch (e: Exception) {
-            text = "Описание не найдено"
+            text = notFoundText
         }
     }
     if (text.isNotEmpty()) {
@@ -54,7 +58,7 @@ fun CopyButton(text: String) {
             isCopied = true
             Toast.makeText(context, "Скопировано в буфер обмена", Toast.LENGTH_SHORT).show()
         },
-        label = { Text(if (isCopied) "Скопировано" else "Копировать") },
+        label = { Text(if (isCopied) stringResource(R.string.copied) else stringResource(R.string.copy)) },
         leadingIcon = {
             Icon(
                 imageVector = if (isCopied) Icons.Default.Check else Icons.Default.ContentCopy,

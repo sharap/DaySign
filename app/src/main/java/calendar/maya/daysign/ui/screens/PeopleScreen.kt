@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.Input
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Input
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -140,7 +141,7 @@ fun PeopleListScreen(
                 if (selectedTab == 0) showAddPersonDialog = true 
                 else showAddGroupDialog = true
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
             }
         }
     ) { innerPadding ->
@@ -216,7 +217,7 @@ fun PeopleList(people: List<Person>, onClick: (Int) -> Unit) {
             ListItem(
                 modifier = Modifier.clickable { onClick(person.id) },
                 headlineContent = { Text(person.name) },
-                supportingContent = { Text("${person.birthDate}, Кин ${mayaDate.kin}") },
+                supportingContent = { Text("${person.birthDate}, ${stringResource(R.string.kin_label)} ${mayaDate.kin}") },
                 leadingContent = {
                     Row {
                         ImageSign(sign = mayaDate.daysign, size = 40.dp)
@@ -233,7 +234,45 @@ fun PeopleList(people: List<Person>, onClick: (Int) -> Unit) {
 @Composable
 fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> Unit) {
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
+    val favoritesIds by viewModel.favoritesIds.collectAsState()
+
     LazyColumn(modifier = Modifier.fillMaxSize()) {
+        if (favoritesIds.isNotEmpty()) {
+            item {
+                val isDefault = defaultGroupId == null
+                ListItem(
+                    modifier = Modifier.clickable { onClick(-1) },
+                    headlineContent = { 
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(stringResource(R.string.favorites))
+                            if (isDefault) {
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(
+                                    Icons.Default.Favorite, 
+                                    contentDescription = null, 
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                    },
+                    supportingContent = { Text(stringResource(R.string.people_count, favoritesIds.size)) },
+                    trailingContent = {
+                        IconButton(onClick = {
+                            if (!isDefault) viewModel.setDefaultGroup(null)
+                        }) {
+                            Icon(
+                                imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = stringResource(R.string.set_as_default),
+                                tint = if (isDefault) Color.Red else LocalContentColor.current
+                            )
+                        }
+                    }
+                )
+                HorizontalDivider()
+            }
+        }
+        
         items(groups) { group ->
             val isDefault = defaultGroupId == group.id
             ListItem(
@@ -252,7 +291,19 @@ fun GroupList(groups: List<Group>, viewModel: MainViewModel, onClick: (Int) -> U
                         }
                     }
                 },
-                supportingContent = { Text("${group.memberIds.size} человек") }
+                supportingContent = { Text(stringResource(R.string.people_count, group.memberIds.size)) },
+                trailingContent = {
+                    IconButton(onClick = {
+                        if (isDefault) viewModel.setDefaultGroup(null)
+                        else viewModel.setDefaultGroup(group.id)
+                    }) {
+                        Icon(
+                            imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = stringResource(R.string.set_as_default),
+                            tint = if (isDefault) Color.Red else LocalContentColor.current
+                        )
+                    }
+                }
             )
             HorizontalDivider()
         }
@@ -324,7 +375,7 @@ fun AddPersonDialog(
                     }
                     showDatePicker = false
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             },
             dismissButton = {
@@ -411,10 +462,10 @@ fun ImportDataScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Импорт / Экспорт") },
+                title = { Text(stringResource(R.string.import_export_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -425,7 +476,7 @@ fun ImportDataScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                 value = jsonText,
                 onValueChange = { jsonText = it },
                 modifier = Modifier.fillMaxWidth().weight(1f),
-                label = { Text("JSON данные") }
+                label = { Text(stringResource(R.string.json_data_label)) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -436,11 +487,11 @@ fun ImportDataScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val clip = ClipData.newPlainText("Daysign Export", exported)
                         clipboard.setPrimaryClip(clip)
-                        Toast.makeText(context, "Скопировано в буфер обмена", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show()
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Экспорт")
+                    Text(stringResource(R.string.export_label))
                 }
                 Button(
                     onClick = {
@@ -450,7 +501,7 @@ fun ImportDataScreen(viewModel: MainViewModel, onBack: () -> Unit) {
                     modifier = Modifier.weight(1f),
                     enabled = jsonText.isNotEmpty()
                 ) {
-                    Text("Импорт")
+                    Text(stringResource(R.string.import_label))
                 }
             }
         }

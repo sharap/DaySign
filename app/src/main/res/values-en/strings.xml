@@ -4,6 +4,7 @@
     <string name="groups">Groups</string>
     <string name="today">Today</string>
     <string name="description">Day Description</string>
+    <string name="description_not_found">Description not found</string>
     <string name="phantoms">Phantoms</string>
     <string name="add_person">Add Person</string>
     <string name="name">Name</string>
@@ -111,6 +112,7 @@
     <string name="about_p3">All texts and illustrations in the app are original.</string>
     <string name="about_version">Version 1.0.2, 09.08.2025</string>
     <string name="back">Back</string>
+    <string name="forward">Forward</string>
 
     <string name="support_in">receives support</string>
     <string name="support_out">gives support</string>
@@ -138,12 +140,15 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
     <string name="map_connections">Map connections with other signs</string>
     <string name="info">Additional information</string>
     <string name="character">Character</string>
+    <string name="symbol_meaning">Symbol Meaning</string>
     <string name="birth_gregorian">Date of birth by Gregorian calendar</string>
     <string name="birth_longcount">Date of birth by Long Count</string>
     <string name="kin_label">Kin</string>
+    <string name="person_not_found">Person not found</string>
     <string name="connections_people">Connections with other people</string>
     <string name="count_days">Days from birth to today</string>
     <string name="age_sign">Age sign</string>
@@ -155,5 +160,40 @@
     <string name="kin_description">Short daysign description</string>
     <string name="equal_people">People with the same sign</string>
     <string name="group_label">Group</string>
+    <string name="set_as_default">Set as default</string>
     <string name="influence_people">Influence on people</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_connections">No connections</string>
+    <string name="characters_title">Characters</string>
+    <string name="about_app">About app</string>
+    <string name="group_power">Power</string>
+    <string name="group_desire">Desire</string>
+    <string name="group_goal">Goal</string>
+    <string name="group_resource">Resource</string>
+    <string name="group_decision">Decision</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="edit_group">Edit Group</string>
+    <string name="add_to_group">Add to Group</string>
+    <string name="group_not_found">Group not found</string>
+    <string name="ok">OK</string>
+    <string name="import_export_title">Import / Export</string>
+    <string name="json_data_label">JSON Data</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="copied">Copied</string>
+    <string name="copy">Copy</string>
+    <string name="import_label">Import</string>
+    <string name="export_label">Export</string>
+    <string name="people_count">%1$d people</string>
+    <string name="in_days">in %1$d days</string>
+
+    <string name="all_signs">All signs</string>
+    <string name="min_connections_label">Min. connections:</string>
+
+    <string name="widget_config_title">Widget Settings</string>
+    <string name="widget_bg_color">Background Color</string>
+    <string name="widget_transparency">Transparency: %1$d%%</string>
+    <string name="widget_show_phantoms">Show Phantoms</string>
+    <string name="widget_show_kin">Show Kin</string>
+    <string name="widget_updated_at">Updated at: %1$s</string>
+    <string name="widget_all_signs">All signs</string>
 </resources>

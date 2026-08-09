@@ -29,10 +29,23 @@ import java.util.*
 fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
     val currentDate by viewModel.currentDate.collectAsState()
     val allPeople by viewModel.allPeople.collectAsState()
+    val locale = Locale.getDefault()
     
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesTo = stringArrayResource(id = R.array.daysign_names_to)
-    val weekDays = listOf("ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ")
+    
+    // Get localized week days
+    val weekDays = remember(locale) {
+        listOf(
+            java.time.DayOfWeek.SUNDAY,
+            java.time.DayOfWeek.MONDAY,
+            java.time.DayOfWeek.TUESDAY,
+            java.time.DayOfWeek.WEDNESDAY,
+            java.time.DayOfWeek.THURSDAY,
+            java.time.DayOfWeek.FRIDAY,
+            java.time.DayOfWeek.SATURDAY
+        ).map { it.getDisplayName(java.time.format.TextStyle.SHORT, locale).uppercase() }
+    }
 
     // Use a fixed anchor date to keep indices stable
     val anchorDate = remember { LocalDate.of(2000, 1, 1) }
@@ -51,7 +64,7 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Календарь") }
+                title = { Text(stringResource(R.string.calendar_title)) }
             )
         }
     ) { innerPadding ->
@@ -118,7 +131,7 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
                             }
                         },
                         trailingContent = {
-                            Text("Кин ${maya.kin}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                            Text("${stringResource(R.string.kin_label)} ${maya.kin}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         },
                         colors = if (isSelected) 
                             ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))

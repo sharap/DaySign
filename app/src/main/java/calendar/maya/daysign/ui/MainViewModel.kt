@@ -1,6 +1,7 @@
 package calendar.maya.daysign.ui
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import calendar.maya.daysign.data.AppDatabase
@@ -16,12 +17,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 import calendar.maya.daysign.ui.widget.DaysignWidget
 import androidx.glance.appwidget.updateAll
+import androidx.core.content.edit
 import java.time.LocalDate
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getDatabase(application)
     private val dao = db.peopleDao()
+    private val prefs = application.getSharedPreferences("daysign_prefs", Context.MODE_PRIVATE)
 
     private val _currentDate = MutableStateFlow(LocalDate.now())
     val currentDate: StateFlow<LocalDate> = _currentDate.asStateFlow()
@@ -50,11 +53,52 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         entities.map { it.toDomain() }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    private val _defaultGroupId = MutableStateFlow<Int?>(null)
+    private val _favoritesIds = MutableStateFlow<Set<Int>>(
+        prefs.getStringSet("favorites_ids", emptySet())?.map { it.toInt() }?.toSet() ?: emptySet()
+    )
+    val favoritesIds = _favoritesIds.asStateFlow()
+
+    fun toggleFavorite(personId: Int) {
+        val current = _favoritesIds.value.toMutableSet()
+        if (current.contains(personId)) {
+            current.remove(personId)
+        } else {
+            current.add(personId)
+        }
+        _favoritesIds.value = current
+        prefs.edit {
+            putStringSet("favorites_ids", current.map { it.toString() }.toSet())
+        }
+    }
+
+    private val _defaultGroupId = MutableStateFlow<Int?>(
+        prefs.getInt("default_group_id", -1).takeIf { it != -1 }
+    )
     val defaultGroupId = _defaultGroupId.asStateFlow()
+
+    val effectiveDefaultGroupMembers: StateFlow<List<Int>?> = combine(
+        _defaultGroupId,
+        groups,
+        _favoritesIds
+    ) { defaultId, allGroups, favIds ->
+        if (defaultId != null) {
+            allGroups.find { it.id == defaultId }?.memberIds
+        } else if (favIds.isNotEmpty()) {
+            favIds.toList()
+        } else {
+            null
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     fun setDefaultGroup(id: Int?) {
         _defaultGroupId.value = id
+        prefs.edit {
+            if (id != null) {
+                putInt("default_group_id", id)
+            } else {
+                remove("default_group_id")
+            }
+        }
     }
 
     private val _navigateToCharacter = MutableSharedFlow<Int>()
@@ -123,8 +167,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun addPersonToGroup(personId: Int, groupId: Int) {
+        viewModelScope.launch {
+            val group = dao.getGroupById(groupId)?.toDomain()
+            group?.let {
+                if (personId !in it.memberIds) {
+                    val updatedIds = it.memberIds + personId
+                    dao.insertGroup(it.copy(memberIds = updatedIds).toEntity())
+                }
+            }
+        }
+    }
+
     fun deleteGroup(group: Group) {
         viewModelScope.launch {
+            if (_defaultGroupId.value == group.id) {
+                setDefaultGroup(null)
+            }
             dao.deleteGroup(group.toEntity())
         }
     }

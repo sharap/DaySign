@@ -5,16 +5,22 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +54,9 @@ fun PersonProfileScreen(
     val allPeople by viewModel.allPeople.collectAsState()
     val allGroups by viewModel.groups.collectAsState()
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
+    val favoritesIds by viewModel.favoritesIds.collectAsState()
+    val effectiveMembers by viewModel.effectiveDefaultGroupMembers.collectAsState()
+    val lang = remember { java.util.Locale.getDefault().language }
     
     val person = allPeople.find { it.id == personId }
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
@@ -56,7 +65,7 @@ fun PersonProfileScreen(
 
     if (person == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Person not found")
+            Text(stringResource(R.string.person_not_found))
         }
         return
     }
@@ -67,7 +76,7 @@ fun PersonProfileScreen(
         MayaCalendar.maya(person.birthDate)
     }
 
-    val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
+    val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.getDefault())
     val personGroups = allGroups.filter { it.memberIds.contains(person.id) }
     
     // Calculations for Info section
@@ -100,14 +109,22 @@ fun PersonProfileScreen(
                     }
                 },
                 actions = {
+                    val isFavorite = favoritesIds.contains(personId)
+                    IconButton(onClick = { viewModel.toggleFavorite(personId) }) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = "Toggle Favorite",
+                            tint = if (isFavorite) Color.Red else LocalContentColor.current
+                        )
+                    }
                     IconButton(onClick = { showEditDialog = true }) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit")
+                        Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
                     }
                     IconButton(onClick = { 
                         viewModel.deletePerson(person)
                         onBack()
                     }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
                     }
                 }
             )
@@ -184,7 +201,7 @@ fun PersonProfileScreen(
                 onToggle = { expandedSection = if (expandedSection == "character") null else "character" }
             ) {
                 Box(modifier = Modifier.padding(16.dp)) {
-                    MarkdownAsset("md/character/ru/character_${person.gender}_kin${mayaDate.kin}.md")
+                    MarkdownAsset("md/character/$lang/character_${person.gender}_kin${mayaDate.kin}.md")
                 }
             }
 
@@ -210,7 +227,7 @@ fun PersonProfileScreen(
                         InfoRow(stringResource(R.string.age_gregorian), (diffDays / 365.25).toInt().toString())
                         InfoRow(
                             stringResource(R.string.next_maya_day), 
-                            "${nextMayaBirth.format(dateFormatter)}, через $toNextBirth дней",
+                            "${nextMayaBirth.format(dateFormatter)}, ${stringResource(R.string.in_days, toNextBirth)}",
                             onClick = { viewModel.navigateToPage(1, nextMayaBirth) }
                         )
                     }
@@ -228,8 +245,7 @@ fun PersonProfileScreen(
             AccordionItem(
                 title = stringResource(R.string.groups),
                 isExpanded = expandedSection == "groups",
-                onToggle = { expandedSection = if (expandedSection == "groups") null else "groups" },
-                visible = personGroups.isNotEmpty()
+                onToggle = { expandedSection = if (expandedSection == "groups") null else "groups" }
             ) {
                 Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
                     personGroups.forEach { group ->
@@ -239,17 +255,48 @@ fun PersonProfileScreen(
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                     }
+
+                    val availableGroups = allGroups.filter { group ->
+                        personId !in group.memberIds
+                    }
+
+                    if (availableGroups.isNotEmpty()) {
+                        var showSelectGroupDialog by remember { mutableStateOf(false) }
+                        
+                        AssistChip(
+                            onClick = { showSelectGroupDialog = true },
+                            label = { Text(stringResource(R.string.add_to_group)) },
+                            leadingIcon = { Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(AssistChipDefaults.IconSize)) },
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+
+                        if (showSelectGroupDialog) {
+                            SelectGroupDialog(
+                                groups = availableGroups,
+                                onDismiss = { showSelectGroupDialog = false },
+                                onConfirm = { groupId ->
+                                    viewModel.addPersonToGroup(personId, groupId)
+                                    showSelectGroupDialog = false
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
             AccordionItem(
-                title = stringResource(R.string.connections_people) + (allGroups.find { it.id == defaultGroupId }?.let { " (${it.name})" } ?: ""),
+                title = (if (defaultGroupId != null) {
+                    stringResource(R.string.connections_people) + " (${allGroups.find { it.id == defaultGroupId }?.name})"
+                } else if (!favoritesIds.isEmpty()) {
+                    stringResource(R.string.favorites)
+                } else {
+                    stringResource(R.string.connections_people)
+                }),
                 isExpanded = expandedSection == "connections",
                 onToggle = { expandedSection = if (expandedSection == "connections") null else "connections" }
             ) {
-                val filterIds = allGroups.find { it.id == defaultGroupId }?.memberIds
-                val filteredPeople = if (filterIds != null) {
-                    allPeople.filter { it.id in filterIds && it.id != person.id }
+                val filteredPeople = if (effectiveMembers != null) {
+                    allPeople.filter { it.id in effectiveMembers!! && it.id != person.id }
                 } else {
                     allPeople.filter { it.id != person.id }
                 }
@@ -275,6 +322,34 @@ fun PersonProfileScreen(
             }
         )
     }
+}
+
+@Composable
+fun SelectGroupDialog(
+    groups: List<calendar.maya.daysign.model.Group>,
+    onDismiss: () -> Unit,
+    onConfirm: (Int) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.add_to_group)) },
+        text = {
+            LazyColumn {
+                items(groups) { group ->
+                    ListItem(
+                        modifier = Modifier.clickable { onConfirm(group.id) },
+                        headlineContent = { Text(group.name) }
+                    )
+                    HorizontalDivider()
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }
 
 @Composable

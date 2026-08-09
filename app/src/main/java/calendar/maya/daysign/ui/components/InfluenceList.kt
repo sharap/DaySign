@@ -52,7 +52,7 @@ fun InfluenceList(
             CircularProgressIndicator(modifier = Modifier.size(24.dp))
         }
     } else if (processedPeople.isEmpty()) {
-        Text("Нет связей", modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.secondary)
+        Text(stringResource(R.string.no_connections), modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.secondary)
     } else {
         Column(modifier = modifier) {
             processedPeople.forEach { (person, connections) ->

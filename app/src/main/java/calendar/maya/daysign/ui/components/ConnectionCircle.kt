@@ -106,7 +106,7 @@ fun ConnectionCircle(
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 8.dp)) {
-            Text("Мин. связей:", fontSize = 12.sp)
+            Text(stringResource(R.string.min_connections_label), fontSize = 12.sp)
             (1..5).forEach { i ->
                 InputChip(
                     selected = minConn == i,
@@ -120,7 +120,7 @@ fun ConnectionCircle(
         // Active Signs Chips
         FlowRow(modifier = Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             if (signList.isEmpty()) {
-                SuggestionChip(onClick = { signList = (1..20).toList() }, label = { Text("Все знаки") })
+                SuggestionChip(onClick = { signList = (1..20).toList() }, label = { Text(stringResource(R.string.all_signs)) })
             }
             signList.forEach { sign ->
                 InputChip(

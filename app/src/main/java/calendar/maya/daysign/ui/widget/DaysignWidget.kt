@@ -3,19 +3,23 @@ package calendar.maya.daysign.ui.widget
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.Preferences
 import androidx.glance.*
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import androidx.glance.layout.*
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -31,6 +35,8 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class DaysignWidget : GlanceAppWidget() {
+
+    override val stateDefinition = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val db = AppDatabase.getDatabase(context)
@@ -55,14 +61,33 @@ class DaysignWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun WidgetContent(maya: MayaDate, people: List<String>) {
+    private fun WidgetContent(maya: MayaDate, people: List<String>, prefs: Preferences, context: Context) {
         val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         
+        val bgColorLong = prefs[WidgetConfigKeys.backgroundColor] ?: Color.White.toArgb().toLong()
+        val bgColorInt = bgColorLong.toInt()
+        val bgColor = Color(bgColorInt)
+        val bgAlpha = prefs[WidgetConfigKeys.backgroundAlpha] ?: 1f
+        val showPhantoms = prefs[WidgetConfigKeys.showPhantoms] ?: true
+        val showKin = prefs[WidgetConfigKeys.showKin] ?: true
+
+        // Calculate luminance to determine text color
+        val r = bgColor.red * bgAlpha + 1f * (1f - bgAlpha)
+        val g = bgColor.green * bgAlpha + 1f * (1f - bgAlpha)
+        val b = bgColor.blue * bgAlpha + 1f * (1f - bgAlpha)
+        val luminance = 0.299f * r + 0.587f * g + 0.114f * b
+        
+        val isDark = luminance < 0.5f
+        val contentColor = if (isDark) Color.White else Color.Black
+        val secondaryContentColor = if (isDark) Color.LightGray else Color.DarkGray
+        val tertiaryContentColor = if (isDark) Color.Gray else Color(0xFF757575)
+
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .padding(8.dp)
-                .background(ImageProvider(R.drawable.glance_background_shape))
+                .background(ColorProvider(bgColor.copy(alpha = bgAlpha)))
+                .cornerRadius(16.dp)
                 .clickable(actionStartActivity<MainActivity>()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
@@ -74,18 +99,20 @@ class DaysignWidget : GlanceAppWidget() {
                 Text(
                     text = "↻",
                     modifier = GlanceModifier.clickable(actionRunCallback<RefreshAction>()),
-                    style = TextStyle(fontSize = 14.sp, color = ColorProvider(Color.Gray))
+                    style = TextStyle(fontSize = 14.sp, color = ColorProvider(tertiaryContentColor))
                 )
             }
 
-            Text(
-                text = "Кин ${maya.kin}",
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = ColorProvider(Color.Black)
+            if (showKin) {
+                Text(
+                    text = "${context.getString(R.string.kin_label)} ${maya.kin}",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = ColorProvider(contentColor)
+                    )
                 )
-            )
+            }
             
             Row(
                 modifier = GlanceModifier.padding(vertical = 6.dp),
@@ -96,7 +123,7 @@ class DaysignWidget : GlanceAppWidget() {
                 SignImage(maya.trecena, 56.dp)
             }
             
-            if (maya.fantoms.isNotEmpty()) {
+            if (showPhantoms && maya.fantoms.isNotEmpty()) {
                 Row(modifier = GlanceModifier.padding(top = 2.dp)) {
                     maya.fantoms.forEach { f ->
                         SignImage(f, 20.dp)
@@ -110,7 +137,7 @@ class DaysignWidget : GlanceAppWidget() {
                     text = people.joinToString(", "),
                     style = TextStyle(
                         fontSize = 12.sp, 
-                        color = ColorProvider(Color.DarkGray),
+                        color = ColorProvider(secondaryContentColor),
                         fontWeight = FontWeight.Medium
                     ),
                     modifier = GlanceModifier.padding(top = 8.dp)
@@ -118,8 +145,8 @@ class DaysignWidget : GlanceAppWidget() {
             }
 
             Text(
-                text = "Обновлено: $currentTime",
-                style = TextStyle(fontSize = 8.sp, color = ColorProvider(Color.Gray)),
+                text = context.getString(R.string.widget_updated_at, currentTime),
+                style = TextStyle(fontSize = 8.sp, color = ColorProvider(tertiaryContentColor)),
                 modifier = GlanceModifier.padding(top = 4.dp)
             )
         }

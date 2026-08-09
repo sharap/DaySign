@@ -45,16 +45,28 @@ fun GroupDetailScreen(
     val groups by viewModel.groups.collectAsState()
     val allPeople by viewModel.allPeople.collectAsState()
     val defaultGroupId by viewModel.defaultGroupId.collectAsState()
+    val favoritesIds by viewModel.favoritesIds.collectAsState()
     
-    val group = groups.find { it.id == groupId }
-    val isDefault = defaultGroupId == groupId
+    val isFavorites = groupId == -1
+    val group = if (isFavorites) {
+        calendar.maya.daysign.model.Group(
+            id = -1,
+            name = stringResource(R.string.favorites),
+            description = "",
+            memberIds = favoritesIds.toList()
+        )
+    } else {
+        groups.find { it.id == groupId }
+    }
+    
+    val isDefault = if (isFavorites) defaultGroupId == null else defaultGroupId == groupId
     
     var showAddPersonDialog by remember { mutableStateOf(false) }
     var showEditGroupDialog by remember { mutableStateOf(false) }
 
     if (group == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Group not found")
+            Text(stringResource(R.string.group_not_found))
         }
         return
     }
@@ -72,23 +84,29 @@ fun GroupDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (isDefault) viewModel.setDefaultGroup(null)
-                        else viewModel.setDefaultGroup(groupId)
+                        if (isFavorites) {
+                            if (!isDefault) viewModel.setDefaultGroup(null)
+                        } else {
+                            if (isDefault) viewModel.setDefaultGroup(null)
+                            else viewModel.setDefaultGroup(groupId)
+                        }
                     }) {
                         Icon(
                             imageVector = if (isDefault) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Set as default",
+                            contentDescription = stringResource(R.string.set_as_default),
                             tint = if (isDefault) Color.Red else LocalContentColor.current
                         )
                     }
-                    IconButton(onClick = { showEditGroupDialog = true }) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit")
-                    }
-                    IconButton(onClick = {
-                        viewModel.deleteGroup(group)
-                        onBack()
-                    }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                    if (!isFavorites) {
+                        IconButton(onClick = { showEditGroupDialog = true }) {
+                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+                        }
+                        IconButton(onClick = { 
+                            viewModel.deleteGroup(group!!)
+                            onBack()
+                        }) {
+                            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
+                        }
                     }
                 }
             )
@@ -117,12 +135,14 @@ fun GroupDetailScreen(
                 onToggle = { expandedSection = if (expandedSection == "people") null else "people" }
             ) {
                 Column {
-                    ListItem(
-                        modifier = Modifier.clickable { showAddPersonDialog = true },
-                        headlineContent = { Text("Добавить человека", color = MaterialTheme.colorScheme.primary) },
-                        leadingContent = { Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
-                    )
-                    HorizontalDivider()
+                    if (!isFavorites) {
+                        ListItem(
+                            modifier = Modifier.clickable { showAddPersonDialog = true },
+                            headlineContent = { Text(stringResource(R.string.add_person), color = MaterialTheme.colorScheme.primary) },
+                            leadingContent = { Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+                        )
+                        HorizontalDivider()
+                    }
 
                     members.forEach { person ->
                         var personExpanded by remember { mutableStateOf(false) }
@@ -143,10 +163,14 @@ fun GroupDetailScreen(
                             },
                             trailingContent = {
                                 IconButton(onClick = {
-                                    val updatedIds = group.memberIds.filter { it != person.id }
-                                    viewModel.addGroup(group.copy(memberIds = updatedIds))
+                                    if (isFavorites) {
+                                        viewModel.toggleFavorite(person.id)
+                                    } else {
+                                        val updatedIds = group!!.memberIds.filter { it != person.id }
+                                        viewModel.addGroup(group.copy(memberIds = updatedIds))
+                                    }
                                 }) {
-                                    Icon(Icons.Default.Close, contentDescription = "Remove")
+                                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove))
                                 }
                             }
                         )
@@ -178,7 +202,7 @@ fun GroupDetailScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { includeFantoms = !includeFantoms }) {
                             Checkbox(checked = includeFantoms, onCheckedChange = { includeFantoms = it })
-                            Text("Фантомы", fontSize = 12.sp)
+                            Text(stringResource(R.string.phantoms), fontSize = 12.sp)
                         }
                     }
                     ResultGroupSection(members, includeFantoms)
@@ -227,32 +251,32 @@ fun EditGroupDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Редактировать группу") },
+        title = { Text(stringResource(R.string.edit_group)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Название") },
+                    label = { Text(stringResource(R.string.name_group)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Описание") },
+                    label = { Text(stringResource(R.string.description_placeholder)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         },
         confirmButton = {
             Button(onClick = { onConfirm(name, description) }, enabled = name.isNotBlank()) {
-                Text("Сохранить")
+                Text(stringResource(R.string.save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -274,14 +298,14 @@ fun SelectPeopleDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Добавить в группу") },
+        title = { Text(stringResource(R.string.add_to_group)) },
         text = {
             Column(modifier = Modifier.heightIn(max = 400.dp)) {
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    placeholder = { Text("Поиск") },
+                    placeholder = { Text(stringResource(R.string.search)) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -321,12 +345,12 @@ fun SelectPeopleDialog(
                 onClick = { onConfirm(selectedIds.toList()) },
                 enabled = selectedIds.isNotEmpty()
             ) {
-                Text("Добавить")
+                Text(stringResource(R.string.add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

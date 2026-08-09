@@ -18,6 +18,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -66,10 +67,10 @@ class MainActivity : ComponentActivity() {
             }
 
             val navItems = listOf(
-                NavItem("Календарь", Icons.Default.CalendarMonth),
-                NavItem("Сегодня", Icons.Default.CalendarToday),
-                NavItem("Люди", Icons.Default.SupervisorAccount),
-                NavItem("Характеры", Icons.Default.Book)
+                NavItem(stringResource(R.string.calendar_title), Icons.Default.CalendarMonth),
+                NavItem(stringResource(R.string.today), Icons.Default.CalendarToday),
+                NavItem(stringResource(R.string.people), Icons.Default.SupervisorAccount),
+                NavItem(stringResource(R.string.characters_title), Icons.Default.Book)
             )
 
             DaysignTheme {
