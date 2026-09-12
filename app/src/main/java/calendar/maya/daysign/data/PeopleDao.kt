@@ -11,6 +11,9 @@ interface PeopleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPerson(person: PersonEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPeople(people: List<PersonEntity>)
+
     @Delete
     suspend fun deletePerson(person: PersonEntity)
 
@@ -22,6 +25,9 @@ interface PeopleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGroup(group: GroupEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGroups(groups: List<GroupEntity>)
 
     @Delete
     suspend fun deleteGroup(group: GroupEntity)

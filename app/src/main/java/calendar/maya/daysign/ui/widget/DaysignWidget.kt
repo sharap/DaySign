@@ -1,6 +1,7 @@
 package calendar.maya.daysign.ui.widget
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -32,7 +33,9 @@ import calendar.maya.daysign.R
 import calendar.maya.daysign.data.AppDatabase
 import calendar.maya.daysign.logic.MayaCalendar
 import calendar.maya.daysign.model.MayaDate
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -43,21 +46,24 @@ class DaysignWidget : GlanceAppWidget() {
     override val stateDefinition = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val db = AppDatabase.getDatabase(context)
-        val dao = db.peopleDao()
-        
-        val date = LocalDate.now()
-        val maya = MayaCalendar.maya(date)
-        
-        val allPeople = dao.getAllPeople().first()
-        val birthdayPeople = allPeople.filter { person ->
-            val personMaya = if (person.sunrise == "before") {
-                MayaCalendar.maya(person.birthDate.minusDays(1))
-            } else {
-                MayaCalendar.maya(person.birthDate)
-            }
-            personMaya.kin == maya.kin
-        }.map { it.name }
+        val (maya, birthdayPeople) = withContext(Dispatchers.IO) {
+            val db = AppDatabase.getDatabase(context)
+            val dao = db.peopleDao()
+            
+            val date = LocalDate.now()
+            val mayaDate = MayaCalendar.maya(date)
+            
+            val allPeople = dao.getAllPeople().first()
+            val names = allPeople.filter { person ->
+                val personMaya = if (person.sunrise == "before") {
+                    MayaCalendar.maya(person.birthDate.minusDays(1))
+                } else {
+                    MayaCalendar.maya(person.birthDate)
+                }
+                personMaya.kin == mayaDate.kin
+            }.map { it.name }
+            mayaDate to names
+        }
 
         provideContent {
             val prefs = currentState<Preferences>()
@@ -203,7 +209,7 @@ class DaysignWidget : GlanceAppWidget() {
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 workRequest
             )
         }
@@ -222,6 +228,24 @@ class RefreshAction : ActionCallback {
 
 class DaysignWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = DaysignWidget()
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED ||
+            intent.action == Intent.ACTION_MY_PACKAGE_REPLACED
+        ) {
+            DaysignWidget.scheduleUpdate(context)
+        }
+    }
+
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: android.appwidget.AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        DaysignWidget.scheduleUpdate(context)
+    }
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)

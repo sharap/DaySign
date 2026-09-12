@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -25,13 +24,13 @@ import androidx.compose.ui.unit.sp
 import calendar.maya.daysign.R
 import calendar.maya.daysign.logic.MayaCalendar
 import calendar.maya.daysign.ui.components.ImageSign
+import calendar.maya.daysign.ui.components.characterPhotoRes
 import calendar.maya.daysign.ui.components.MarkdownAsset
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
-    val context = LocalContext.current
     val lang = remember { Locale.getDefault().language }
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesGenitive = stringArrayResource(id = R.array.daysign_names_genitive)
@@ -118,8 +117,8 @@ fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
                         .verticalScroll(rememberScrollState())
                 ) {
                     // Photo
-                    val imageRes = context.resources.getIdentifier("photo$characterId", "drawable", context.packageName)
-                    if (imageRes != 0) {
+                    val imageRes = characterPhotoRes(characterId)
+                    if (imageRes != null) {
                         Image(
                             painter = painterResource(id = imageRes),
                             contentDescription = null,

@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -48,6 +47,9 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
         ).map { it.getDisplayName(java.time.format.TextStyle.SHORT, locale).uppercase() }
     }
 
+    // Created once per screen instead of once per visible list item
+    val dayFormatter = remember { DateTimeFormatter.ofPattern("dd.MM.yyyy") }
+
     // Use a fixed anchor date to keep indices stable
     val anchorDate = remember { LocalDate.of(2000, 1, 1) }
     val baseIndex = 100000 // Very large number to allow long scroll back
@@ -76,14 +78,14 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            itemsIndexed(
-                items = List(baseIndex * 2) { it },
-                key = { _, index -> index }
-            ) { index, _ ->
-                val date = anchorDate.plusDays((index - baseIndex).toLong())
-                val maya = MayaCalendar.maya(date)
+            items(
+                count = baseIndex * 2,
+                key = { index -> index }
+            ) { index ->
+                val date = remember(index) { anchorDate.plusDays((index - baseIndex).toLong()) }
+                val maya = remember(date) { MayaCalendar.maya(date) }
                 val isSelected = date == currentDate
-                
+
                 // Find people with this kin - OPTIMIZED: use pre-calculated map
                 val birthdays = peopleByKin[maya.kin] ?: emptyList()
 
@@ -102,7 +104,7 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
                         },
                         supportingContent = {
                             Column {
-                                Text("${date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))} ${weekDays[date.dayOfWeek.value % 7]}")
+                                Text("${date.format(dayFormatter)} ${weekDays[date.dayOfWeek.value % 7]}")
                                 if (birthdays.isNotEmpty()) {
                                     Text(
                                         text = birthdays.joinToString(", ") { it.name },

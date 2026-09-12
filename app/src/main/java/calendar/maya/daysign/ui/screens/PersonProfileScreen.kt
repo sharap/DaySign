@@ -72,7 +72,7 @@ fun PersonProfileScreen(
         MayaCalendar.maya(person.birthDate)
     }
 
-    val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.getDefault())
+    val dateFormatter = remember { DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.getDefault()) }
     val personGroups = allGroups.filter { it.memberIds.contains(person.id) }
     
     val birthDate = if (person.sunrise == "before") person.birthDate.minusDays(1) else person.birthDate
@@ -203,9 +203,14 @@ fun PersonProfileScreen(
                         val connTitle = if (defaultGroupId != null) stringResource(R.string.connections_people) + " (${allGroups.find { it.id == defaultGroupId }?.name})" else if (favoritesIds.isNotEmpty()) stringResource(R.string.favorites) else stringResource(R.string.connections_people)
                         AccordionItem(title = connTitle, isExpanded = expandedSection == "connections", onToggle = { expandedSection = if (expandedSection == "connections") null else "connections" }) {
                             val filterIds = allGroups.find { it.id == defaultGroupId }?.memberIds
-                            val filteredPeople = if (filterIds != null) allPeople.filter { it.id in filterIds && it.id != person.id }
-                            else if (favoritesIds.isNotEmpty()) allPeople.filter { it.id in favoritesIds && it.id != person.id }
-                            else allPeople.filter { it.id != person.id }
+                            // Kept in a keyed remember so the list is not rebuilt on every
+                            // recomposition and InfluenceList can actually skip.
+                            val filteredPeople = remember(allPeople, filterIds, favoritesIds, person.id) {
+                                val ids = filterIds?.toHashSet()
+                                if (ids != null) allPeople.filter { it.id in ids && it.id != person.id }
+                                else if (favoritesIds.isNotEmpty()) allPeople.filter { it.id in favoritesIds && it.id != person.id }
+                                else allPeople.filter { it.id != person.id }
+                            }
                             InfluenceList(targetKinDaysign = mayaDate.daysign, targetKinTrecena = mayaDate.trecena, people = filteredPeople, onPersonClick = { onNavigateToPerson(it.id) })
                         }
                     }
@@ -287,9 +292,14 @@ fun PersonProfileScreen(
                     }
                     AccordionItem(title = (if (defaultGroupId != null) stringResource(R.string.connections_people) + " (${allGroups.find { it.id == defaultGroupId }?.name})" else if (favoritesIds.isNotEmpty()) stringResource(R.string.favorites) else stringResource(R.string.connections_people)), isExpanded = expandedSection == "connections", onToggle = { expandedSection = if (expandedSection == "connections") null else "connections" }) {
                         val filterIds = allGroups.find { it.id == defaultGroupId }?.memberIds
-                        val filteredPeople = if (filterIds != null) allPeople.filter { it.id in filterIds && it.id != person.id }
-                        else if (favoritesIds.isNotEmpty()) allPeople.filter { it.id in favoritesIds && it.id != person.id }
-                        else allPeople.filter { it.id != person.id }
+                        // Kept in a keyed remember so the list is not rebuilt on every
+                        // recomposition and InfluenceList can actually skip.
+                        val filteredPeople = remember(allPeople, filterIds, favoritesIds, person.id) {
+                            val ids = filterIds?.toHashSet()
+                            if (ids != null) allPeople.filter { it.id in ids && it.id != person.id }
+                            else if (favoritesIds.isNotEmpty()) allPeople.filter { it.id in favoritesIds && it.id != person.id }
+                            else allPeople.filter { it.id != person.id }
+                        }
                         InfluenceList(targetKinDaysign = mayaDate.daysign, targetKinTrecena = mayaDate.trecena, people = filteredPeople, onPersonClick = { onNavigateToPerson(it.id) }, modifier = Modifier.padding(8.dp))
                     }
                 }

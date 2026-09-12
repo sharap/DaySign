@@ -51,6 +51,13 @@ fun ConnectionCircle(
     var secretEnabled by remember { mutableStateOf(true) }
     var minConn by remember { mutableIntStateOf(1) }
 
+    val signTextPaint = remember {
+        android.graphics.Paint().apply {
+            textAlign = android.graphics.Paint.Align.CENTER
+            isFakeBoldText = true
+        }
+    }
+
     val intersections = IntArray(21)
     val visibleSigns = signList.toMutableSet()
 
@@ -318,16 +325,15 @@ fun ConnectionCircle(
                             alpha = opacity
                         )
                         
+                        // The paint is reused instead of allocated per sign per frame;
+                        // drawing is sequential, so mutating it here is safe.
+                        signTextPaint.color = getSignTextColor(sign)
+                        signTextPaint.textSize = 12.dp.toPx()
                         drawContext.canvas.nativeCanvas.drawText(
                             sign.toString(),
                             signPos.x,
                             signPos.y + 5.dp.toPx(),
-                            android.graphics.Paint().apply {
-                                color = getSignTextColor(sign)
-                                textAlign = android.graphics.Paint.Align.CENTER
-                                textSize = 12.dp.toPx()
-                                isFakeBoldText = true
-                            }
+                            signTextPaint
                         )
                 }
             }

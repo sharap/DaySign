@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.withTransaction
 import calendar.maya.daysign.data.AppDatabase
 import calendar.maya.daysign.data.GroupEntity
 import calendar.maya.daysign.data.PersonEntity
@@ -252,10 +253,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
-                dao.clearAllPeople()
-                dao.clearAllGroups()
-                newPeople.forEach { dao.insertPerson(it) }
-                newGroups.forEach { dao.insertGroup(it) }
+                // One transaction for the whole import instead of a separate
+                // commit per row, and batched inserts instead of N statements.
+                db.withTransaction {
+                    dao.clearAllPeople()
+                    dao.clearAllGroups()
+                    dao.insertPeople(newPeople)
+                    dao.insertGroups(newGroups)
+                }
                 DaysignWidget().updateAll(getApplication())
             } catch (e: Exception) {
                 e.printStackTrace()

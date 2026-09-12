@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.m3.Markdown
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.io.InputStreamReader
 
 import androidx.compose.ui.res.stringResource
@@ -26,14 +28,18 @@ fun MarkdownAsset(path: String) {
     val notFoundText = stringResource(R.string.description_not_found)
     var text by remember { mutableStateOf("") }
     LaunchedEffect(path) {
-        try {
-            context.assets.open(path).use { inputStream ->
-                InputStreamReader(inputStream).use { reader ->
-                    text = reader.readText()
+        // LaunchedEffect runs on the composition (main) dispatcher, so the asset
+        // read has to be moved off it explicitly.
+        text = withContext(Dispatchers.IO) {
+            try {
+                context.assets.open(path).use { inputStream ->
+                    InputStreamReader(inputStream).use { reader ->
+                        reader.readText()
+                    }
                 }
+            } catch (e: Exception) {
+                notFoundText
             }
-        } catch (e: Exception) {
-            text = notFoundText
         }
     }
     if (text.isNotEmpty()) {

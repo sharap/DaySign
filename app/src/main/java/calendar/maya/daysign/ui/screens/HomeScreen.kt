@@ -43,7 +43,7 @@ fun HomeScreen(viewModel: MainViewModel) {
     
     val daysignNames = stringArrayResource(id = R.array.daysign_names)
     val daysignNamesTo = stringArrayResource(id = R.array.daysign_names_to)
-    val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.getDefault())
+    val dateFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.getDefault()) }
     
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -255,10 +255,13 @@ private fun LazyListScope.homeContentItems(
             isExpanded = expandedSection == "influence",
             onToggle = { onToggle(if (expandedSection == "influence") null else "influence") }
         ) {
-            val filteredPeople = if (effectiveMembers != null) {
-                allPeople.filter { it.id in effectiveMembers }
-            } else {
-                allPeople
+            val filteredPeople = remember(allPeople, effectiveMembers) {
+                if (effectiveMembers != null) {
+                    val ids = effectiveMembers.toHashSet()
+                    allPeople.filter { it.id in ids }
+                } else {
+                    allPeople
+                }
             }
 
             InfluenceList(

@@ -55,7 +55,13 @@ fun GroupDetailScreen(
     }
     
     val isDefault = if (isFavorites) defaultGroupId == null else defaultGroupId == groupId
-    val members = allPeople.filter { it.id in (group?.memberIds ?: emptyList()) }
+    // memberIds is a List, so "in" was a linear scan per person on every
+    // recomposition; keyed remember + Set makes this O(n) and stable.
+    val memberIds = group?.memberIds ?: emptyList()
+    val members = remember(allPeople, memberIds) {
+        val ids = memberIds.toHashSet()
+        allPeople.filter { it.id in ids }
+    }
 
     var showAddPersonDialog by remember { mutableStateOf(false) }
     var showEditGroupDialog by remember { mutableStateOf(false) }

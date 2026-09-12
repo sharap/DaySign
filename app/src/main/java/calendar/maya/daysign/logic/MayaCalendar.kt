@@ -64,7 +64,30 @@ object MayaCalendar {
         )
     }
 
-    fun getConnections(daysign: Int): List<Int> {
+    /**
+     * Connections and phantoms are pure functions of the sign numbers, so the
+     * results are computed once and shared. They are read on every frame of the
+     * connection circle and for every visible calendar row, where recomputing
+     * them allocated a fresh list each time.
+     *
+     * Index 0 is unused (signs are 1..20) and holds an empty list.
+     */
+    private val connectionsCache: Array<List<Int>> = Array(21) { sign ->
+        if (sign in 1..20) computeConnections(sign) else emptyList()
+    }
+
+    private val fantomsCache: Array<List<Int>> = Array(21 * 21) { i ->
+        computeFantoms(i / 21, i % 21)
+    }
+
+    fun getConnections(daysign: Int): List<Int> =
+        if (daysign in 1..20) connectionsCache[daysign] else emptyList()
+
+    fun getFantoms(daysign: Int, trecena: Int): List<Int> =
+        if (daysign in 0..20 && trecena in 0..20) fantomsCache[daysign * 21 + trecena]
+        else computeFantoms(daysign, trecena)
+
+    private fun computeConnections(daysign: Int): List<Int> {
         if (daysign !in 1..20) return emptyList()
         
         val connections = mutableListOf<Int>()
@@ -79,14 +102,14 @@ object MayaCalendar {
         return connections
     }
 
-    fun getFantoms(daysign: Int, trecena: Int): List<Int> {
+    private fun computeFantoms(daysign: Int, trecena: Int): List<Int> {
         if (daysign == trecena) return emptyList()
         
         val fantoms = listOf(daysign, trecena)
         
         val conns = IntArray(21)
         for (f in fantoms) {
-            val c = getConnections(f)
+            val c = if (f in 1..20) computeConnections(f) else emptyList()
             for (conn in c) {
                 conns[conn]++
             }
