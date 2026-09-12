@@ -83,7 +83,9 @@ fun CalendarScreen(viewModel: MainViewModel, resetTrigger: Int = 0) {
                 key = { index -> index }
             ) { index ->
                 val date = remember(index) { anchorDate.plusDays((index - baseIndex).toLong()) }
-                val maya = remember(date) { MayaCalendar.maya(date) }
+                // Only kin/daysign/trecena are shown here, so the row takes the
+                // shared cyclic values instead of allocating a full MayaDate.
+                val maya = remember(date) { MayaCalendar.cycleInfo(date) }
                 val isSelected = date == currentDate
 
                 // Find people with this kin - OPTIMIZED: use pre-calculated map

@@ -13,16 +13,24 @@ android {
         applicationId = "calendar.maya.daysign"
         minSdk = 23
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 5
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            // TEMPORARY - local performance testing only.
+            // The debug keystore ships with the Android SDK and is identical for
+            // everyone, so a build signed with it must never be published. Replace
+            // this with a real upload key before any release; Play does not allow
+            // changing the signing key afterwards.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -54,6 +62,9 @@ dependencies {
     
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.3")
+
+    // Image loading (async decode + memory/disk cache for character photos)
+    implementation("io.coil-kt:coil-compose:2.7.0")
     
     // Glance (Widgets)
     implementation("androidx.glance:glance-appwidget:1.1.1")

@@ -57,8 +57,12 @@ fun InfluenceList(
     } else if (processedPeople.isEmpty()) {
         Text(stringResource(R.string.no_connections), modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.secondary)
     } else {
+        // Rendered progressively: this sits inside scrollable containers that
+        // cannot host a LazyColumn, so all rows are composed eagerly.
+        val visibleCount = rememberProgressiveCount(processedPeople.size)
         Column(modifier = modifier) {
-            processedPeople.forEach { (person, connections) ->
+            for (i in 0 until visibleCount) {
+                val (person, connections) = processedPeople[i]
                 val personMaya = person.mayaDate!!
 
                 ListItem(

@@ -25,19 +25,44 @@ object MayaCalendar {
         return floor(365.25 * (year + 4716.0)).toInt() + floor(30.6001 * (month + 1)).toInt() + d + b - 1524
     }
 
+    private const val CORR = 584283 // Thompson Goodman Martinez Offset
+
+    /** Day count since the correlation date - the basis for everything below. */
+    private fun dayCount(date: LocalDate): Int =
+        julian(date.year, date.monthValue, date.dayOfMonth) - CORR
+
+    /** Position in the 260-day cycle, floor-mod so ancient dates stay in range. */
+    private fun cycleIndex(days: Int): Int {
+        val m = days % 260
+        return if (m < 0) m + 260 else m
+    }
+
+    /**
+     * Everything that repeats with the 260-day count. The long count and the date
+     * itself are not cyclic, so they stay in MayaDate and are computed per date.
+     */
+    class CycleInfo(
+        val kin: Int,
+        val daysign: Int,
+        val trecena: Int,
+        val tone: Int,
+        val fantoms: List<Int>
+    )
+
+    /**
+     * The cyclic values for a date, without building a MayaDate.
+     *
+     * The returned object is shared, not allocated per call, so screens that only
+     * need kin/daysign/trecena (the calendar list) can ask for a date's values on
+     * every visible row without allocating anything.
+     */
+    fun cycleInfo(date: LocalDate): CycleInfo = cycleTable[cycleIndex(dayCount(date))]
+
     fun maya(date: LocalDate): MayaDate {
-        val corr = 584283 // Thompson Goodman Martinez Offset
-        val y = date.year
-        val m = date.monthValue
-        val d = date.dayOfMonth
+        val days = dayCount(date)
+        val cycle = cycleTable[cycleIndex(days)]
 
-        val julianDays = julian(y, m, d)
-        val days = julianDays - corr
-        
-        var kin = days - (260 * floor(days / 260.0).toInt()) - 100
-        if (kin < 1) kin += 260
-
-        // Long Count
+        // Long Count - not cyclic, so still computed per date.
         var tempDays = days
         val baktun = floor(tempDays / 144000.0).toInt()
         tempDays -= baktun * 144000
@@ -46,20 +71,15 @@ object MayaCalendar {
         val tun = floor(tempDays / 360.0).toInt()
         tempDays -= tun * 360
         val uinal = floor(tempDays / 20.0).toInt()
-        val day = kin % 20
+        val day = cycle.kin % 20
 
-        val tone = if (kin % 13 == 0) 13 else kin % 13
-        val daysign = if (kin % 20 == 0) 20 else kin % 20
-        
-        val trecena = if ((daysign - tone + 1) < 1) (daysign - tone + 21) else (daysign - tone + 1)
-        
         return MayaDate(
             date = date,
-            kin = kin,
-            daysign = daysign,
-            trecena = trecena,
-            tone = tone,
-            fantoms = getFantoms(daysign, trecena),
+            kin = cycle.kin,
+            daysign = cycle.daysign,
+            trecena = cycle.trecena,
+            tone = cycle.tone,
+            fantoms = cycle.fantoms,
             longCount = LongCount(baktun, katun, tun, uinal, day),
         )
     }
@@ -78,6 +98,19 @@ object MayaCalendar {
 
     private val fantomsCache: Array<List<Int>> = Array(21 * 21) { i ->
         computeFantoms(i / 21, i % 21)
+    }
+
+    /**
+     * One entry per position in the 260-day cycle, built once. Declared after the
+     * caches above because it reads getFantoms() while initialising.
+     */
+    private val cycleTable: Array<CycleInfo> = Array(260) { mod ->
+        var kin = mod - 100
+        if (kin < 1) kin += 260
+        val tone = if (kin % 13 == 0) 13 else kin % 13
+        val daysign = if (kin % 20 == 0) 20 else kin % 20
+        val trecena = if ((daysign - tone + 1) < 1) (daysign - tone + 21) else (daysign - tone + 1)
+        CycleInfo(kin, daysign, trecena, tone, getFantoms(daysign, trecena))
     }
 
     fun getConnections(daysign: Int): List<Int> =

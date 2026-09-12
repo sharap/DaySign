@@ -1,7 +1,6 @@
 package calendar.maya.daysign.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,8 +22,10 @@ import androidx.compose.ui.unit.sp
 import calendar.maya.daysign.R
 import calendar.maya.daysign.logic.MayaCalendar
 import calendar.maya.daysign.ui.components.ImageSign
+import calendar.maya.daysign.ui.components.characterPhotoAspectRatio
 import calendar.maya.daysign.ui.components.characterPhotoRes
 import calendar.maya.daysign.ui.components.MarkdownAsset
+import coil.compose.AsyncImage
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,10 +119,14 @@ fun CharacterDetailScreen(characterId: Int, onBack: () -> Unit) {
                     // Photo
                     val imageRes = characterPhotoRes(characterId)
                     if (imageRes != null) {
-                        Image(
-                            painter = painterResource(id = imageRes),
+                        // painterResource() decoded these ~250 KB JPEGs synchronously
+                        // during composition, on the main thread, with no cache.
+                        AsyncImage(
+                            model = imageRes,
                             contentDescription = null,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(characterPhotoAspectRatio(characterId)),
                             contentScale = ContentScale.FillWidth
                         )
                     }

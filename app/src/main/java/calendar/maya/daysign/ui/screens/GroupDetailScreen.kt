@@ -28,6 +28,7 @@ import calendar.maya.daysign.ui.MainViewModel
 import calendar.maya.daysign.ui.components.AccordionItem
 import calendar.maya.daysign.ui.components.ImageSign
 import calendar.maya.daysign.ui.components.InfluenceList
+import calendar.maya.daysign.ui.components.rememberProgressiveCount
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +179,9 @@ fun GroupDetailScreen(
                                 ListItem(modifier = Modifier.clickable { showAddPersonDialog = true }, headlineContent = { Text(stringResource(R.string.add_person), color = MaterialTheme.colorScheme.primary) }, leadingContent = { Icon(Icons.Default.Add, null, tint = MaterialTheme.colorScheme.primary) })
                                 HorizontalDivider()
                             }
-                            members.forEach { person ->
+                            val visibleMembers = rememberProgressiveCount(members.size)
+                            for (i in 0 until visibleMembers) {
+                                val person = members[i]
                                 var personExpanded by remember { mutableStateOf(false) }
                                 val personMaya = if (person.sunrise == "before") MayaCalendar.maya(person.birthDate.minusDays(1)) else MayaCalendar.maya(person.birthDate)
                                 ListItem(modifier = Modifier.clickable { personExpanded = !personExpanded }, headlineContent = { Text(person.name) }, leadingContent = { Row { ImageSign(sign = personMaya.daysign, size = 32.dp); ImageSign(sign = personMaya.trecena, size = 32.dp) } }, trailingContent = { IconButton(onClick = { if (isFavorites) viewModel.toggleFavorite(person.id) else { val updatedIds = group!!.memberIds.filter { it != person.id }; viewModel.addGroup(group.copy(memberIds = updatedIds)) } }) { Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove)) } })
