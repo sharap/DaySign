@@ -1,9 +1,22 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+
+// Release signing credentials are kept out of version control. Copy
+// keystore.properties.example to keystore.properties and fill it in to produce a
+// properly signed release; the file is gitignored.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
+val hasReleaseKeystore = keystorePropertiesFile.exists()
 
 android {
     namespace = "calendar.maya.daysign"
@@ -19,18 +32,33 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            // TEMPORARY - local performance testing only.
-            // The debug keystore ships with the Android SDK and is identical for
-            // everyone, so a build signed with it must never be published. Replace
-            // this with a real upload key before any release; Play does not allow
-            // changing the signing key afterwards.
-            signingConfig = signingConfigs.getByName("debug")
+            // Falls back to the debug key so the release build still runs locally
+            // without a keystore. That key ships with the Android SDK and is the
+            // same for everyone, so such an APK is for local testing only and must
+            // never be published - Play does not allow changing the signing key
+            // once an app is uploaded.
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
     compileOptions {

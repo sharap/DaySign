@@ -1,15 +1,32 @@
+# Build
 *.iml
 .gradle
-/local.properties
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Local configuration - machine specific, never committed
+local.properties
+
+# Signing - credentials and keystores must stay out of the repository
+keystore.properties
+*.jks
+*.keystore
+
+# IDE - machine specific state
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
+
+# OS
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+
+# Claude Code scratch output
+/.artifacts
