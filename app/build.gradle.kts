@@ -18,6 +18,13 @@ val keystoreProperties = Properties().apply {
 }
 val hasReleaseKeystore = keystorePropertiesFile.exists()
 
+if (!hasReleaseKeystore) {
+    logger.lifecycle(
+        "ВНИМАНИЕ: keystore.properties не найден. Сборка release будет подписана " +
+        "отладочным ключом и не подлежит публикации. См. RELEASING.md"
+    )
+}
+
 android {
     namespace = "calendar.maya.daysign"
     compileSdk = 35

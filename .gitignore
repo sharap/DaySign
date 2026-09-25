@@ -28,5 +28,6 @@ keystore.properties
 # OS
 .DS_Store
 
-# Claude Code scratch output
+# AI tooling scratch output
 /.artifacts
+*.artifact.md

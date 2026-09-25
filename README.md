@@ -6,6 +6,11 @@ Android-приложение календаря майя (цолькин) — а
 Приложение считает кин дня, дневной знак и трецену, тон, длинный счёт и фантомы,
 хранит базу людей с датами рождения и показывает связи между их знаками.
 
+## Установка
+
+Готовый APK — на странице [выпусков](https://github.com/sharap/DaySign/releases).
+Требуется Android 6.0 или новее.
+
 ## Скриншоты
 
 | Сегодня | Календарь | Люди | Группа | Характер |
@@ -47,27 +52,19 @@ Android-приложение календаря майя (цолькин) — а
 ### Подписанный релиз
 
 Ключи подписи не хранятся в репозитории. Скопируйте `keystore.properties.example`
-в `keystore.properties` и заполните:
+в `keystore.properties` и заполните, затем `./gradlew assembleRelease`.
+Порядок выпуска описан в [RELEASING.md](RELEASING.md).
 
-```properties
-storeFile=/абсолютный/путь/upload-keystore.jks
-storePassword=...
-keyAlias=upload
-keyPassword=...
-```
-
-```bash
-./gradlew assembleRelease
-```
-
-Без этого файла релизная сборка подписывается отладочным ключом — он одинаков у
-всех, кто ставил Android SDK, поэтому такая сборка годится только для локальной
-проверки и не подлежит публикации.
+Без `keystore.properties` релизная сборка подписывается отладочным ключом — он
+одинаков у всех, кто ставил Android SDK, поэтому такая сборка годится только для
+локальной проверки и не подлежит публикации.
 
 ## Технологии
 
 Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, Glance
 (виджет), WorkManager, Coil, Material 3 Adaptive.
+
+История изменений — [CHANGELOG.md](CHANGELOG.md).
 
 ## Материалы
 
