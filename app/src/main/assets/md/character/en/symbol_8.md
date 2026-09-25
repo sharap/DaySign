@@ -1,7 +1,7 @@
-This sign is sometimes called by another name – Rabbit – but that name comes from the Aztec tradition and has nothing to do with the Maya calendar.
+The name Rabbit turns up, but it is Aztec and has nothing to do with the Maya calendar.
 
-The Maya word LAMAT literally translates as "radiance", "the star of Sunrise". The same name was given to the planet Venus, which closes the night and precedes the rising of the sun. The Maya root "lam" also has another meaning – "ending, completion".
+LAMAT is "radiance" and "the star of Sunrise". The Maya gave the same name to Venus: it closes the night and comes out ahead of the sun. The root "lam" has a second side too — "ending", "completion".
 
-The main element of the Sunrise glyph is four small circles in the four corners, radiating from the center. In the language of graphic imagery this conveys the idea of abundance, fullness and completion.
+The glyph rests on four small circles, set at the corners and radiating from the centre. Such a drawing read to the Maya as abundance, fullness, completion.
 
-In the broadest sense, Sunrise should be read as a sign of completion: everything that was ripening before is brought to its end – from the final stage of a fruit maturing in the mother's womb to long-begun undertakings that are finally finished.
+Lamat is about carrying things through. Everything that has been ripening until now comes to its end: the fruit with the last stage of maturing in the womb behind it, and the undertakings begun long ago and finished at last.

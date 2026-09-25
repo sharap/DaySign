@@ -1,5 +1,5 @@
-The Maya word AKBAL (in another variant, AKABAL) literally translates as "night," "darkness" – and also "dampness." In the "Book of the Order of Days," the Night sign is described in these words: "On the day Akabal the Lord moistened the earth, then gave it form, so that it might become a human being."
+AKBAL — AKABAL in another pronunciation — joins "night" and "darkness", but the word carries a third sense as well: "dampness". That sense explains a line from the "Book of the Order of Days": "On the day Akabal the Lord moistened the earth, then gave it form, so that it might become a human being."
 
-The sign's glyph loosely depicts the entrance to a cave or hut, set inside a gaping, fanged jaw. All of this is shown against a backdrop of a dense procession of clouds. In the figurative language of the Maya, such a composition conveys the idea of all-consuming darkness and solitude.
+The glyph is built from three parts. Inside a gaping, fanged jaw sits an opening — the mouth of a cave, or the doorway of a hut; behind it dense clouds pile up. For the Maya the combination read plainly: darkness that swallows everything, and solitude.
 
-So Akbal – Night – is the sign of detachment from the outside world and immersion in one's own cares and feelings.
+Hence the meaning of the sign. Akbal turns a person away from the outside world and leads inward, toward their own cares and feelings.

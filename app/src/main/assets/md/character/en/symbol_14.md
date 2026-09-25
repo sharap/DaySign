@@ -1,5 +1,5 @@
-Jaguar is the traditional name of this sign among the K'iche' Maya. The Maya word IX itself literally translates as "hide" or "pelt", and also as "emery".
+Jaguar is what the K'iche' Maya call the sign; the Maya word IX itself means "hide" — and "emery" besides.
 
-Besides a jaguar's pelt, the glyph of the Jaguar sign often contains a multitude of grains of sand, and the dotted lines convey the movement of sand as an object is being polished – this is how the idea of bringing a task to completion is expressed. The image of the jaguar itself, which was a cult animal for the Maya, personifies strength, intelligence and decisiveness.
+The second meaning explains the drawing. Along with the jaguar's hide, grains of sand are scattered through the glyph, and a dotted line shows how sand travels during polishing. What gets polished is what is already made — so the sign carries the thought of bringing work to its end. The jaguar, for its part, was a cult animal among the Maya and stood for strength, intelligence and resolve.
 
-The Ix sign, Jaguar, as a whole symbolizes strength, will, decisiveness, the ability to see what one has started through to the end and, most importantly, high intellectual ability.
+All of this is what Ix holds together: will, strength, resolve, the capacity to finish what was started — and, above the rest, a sharp mind.

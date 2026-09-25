@@ -1,5 +1,7 @@
-Among the Quiché Maya and the Aztecs this sign is called Monkey, whereas the Mayan word CHUEN literally means "skilful," "able," and apparently goes back to a root meaning "to fill." The Chuen glyph conventionally depicts an open mouth with teeth. Often a grain sign is placed inside the mouth – a rectangle divided in two – along with the image of a vessel in which provisions are stored.
+Monkey is what the K'iche' and the Aztecs call this sign. The Maya word itself, CHUEN, means "skilful" and "able", and the root behind it seems to carry the sense "to fill".
 
-In a number of texts the glyph of this sign is reduced to nothing more than a mouth with three teeth. Among the Maya the number three ("ox" in Mayan) invariably served to denote the concept of "many," while the word "toothed" (Mayan "ah co" or "co ol") also meant "strong," "capable." From this it is clear that a mouth with three teeth conveys the idea of an abundance of strength and abilities.
+What the glyph shows is an open mouth with teeth. A grain sign often sits inside it — a rectangle split in two — together with a vessel of the kind provisions were kept in.
 
-Thus Chuen, the sign of the Master, embodies the idea of an abundance of strength, abilities and talents.
+Some texts pare the drawing down to a mouth and three teeth, and every part of that is legible. Three, "ox" in Maya, was the standing way of saying "many"; "toothed", "ah co" or "co ol", doubled as "strong" and "capable". A mouth with three teeth therefore says: strength and ability in quantity.
+
+That is what Chuen, the Master, holds — a surplus of force, skill and talent.
